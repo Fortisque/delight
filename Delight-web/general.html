@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body %}
+    <h1> Dashboard </h1>
+    <a href="/review/"> General </a>
+    <a href="/review/food"> Food </a>
+    <a href="/review/server"> Server </a>
+
+    {% for review in reviews %}
+        <div>{{review.comment}}</div>
+    {% endfor %}
+
+    {{star_count}}
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+	<h2> general </h2>
+
+    <script>
+        var svgContainer = d3.select("body").append("svg")
+                                .attr("width", 200)
+                                .attr("height", 200)
+                                .style("border", "1px solid black");
+    </script>
+
+    
+    
+{% endblock %}

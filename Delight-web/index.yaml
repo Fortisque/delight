@@ -10,3 +10,14 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Review
+  properties:
+  - name: business_key
+  - name: kind_of_review
+  - name: created_at
+
+- kind: Review
+  properties:
+  - name: food_item_key
+  - name: kind_of_review
+  - name: created_at
