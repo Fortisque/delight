@@ -18,9 +18,21 @@ import webapp2
 import jinja2
 import os
 import logging
+import json as simplejson
+import urllib2
+
+from models import *
+
+BUSINESS_NAME = 'Gecko Gecko'
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+
+def gql_json_parser(query_obj):
+    result = []
+    for entry in query_obj:
+        result.append(dict([(p, unicode(getattr(entry, p))) for p in entry.properties()]))
+    return result
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -30,7 +42,29 @@ class MainHandler(webapp2.RequestHandler):
 
 class ReceiptHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.out.write('hello')
+        receipt_key = self.request.get('id')
+
+        receipt = Receipt.all().get()
+        receipt_key = receipt.key()
+
+        template_values = {}
+
+        food_item_keys = []
+        template_values['food_items'] = []
+        for food_item_receipt in ReceiptsFoodItems.gql("WHERE receipt_key = :1", str(receipt_key)):
+            food_item_keys.append(food_item_receipt.food_item_key)
+
+        query_data = FoodItem.get(food_item_keys)
+
+        template_values['food_items'] = query_data
+        template_values['json_query_data'] = simplejson.dumps(gql_json_parser(query_data))
+        template_values['QR_url'] = 'http://api.qrserver.com/v1/create-qr-code/?data=%s&size=100x100' % (template_values['json_query_data'],)
+        template_values['QR_data'] = urllib2.urlopen(template_values['QR_url']).read()
+        template = jinja_environment.get_template("receipt.html")
+        self.response.out.write(template.render(template_values))
+
+    def post(self):
+        self.response.write("hello")
 
 class ReviewGeneralHandler(webapp2.RequestHandler):
     def get(self):
@@ -52,7 +86,40 @@ class ReviewServerHandler(webapp2.RequestHandler):
 
 class AnalyzeHandler(webapp2.RequestHandler):
     def get(self):
+        business = Business.all().filter('name =', BUSINESS_NAME).get()
+        template_values = {}
+        template_values['food_items'] = FoodItem.gql("WHERE business_key = :1", str(business.key()))
+        template = jinja_environment.get_template("analyze.html")
+        self.response.out.write(template.render(template_values))
+
+class FoodHandler(webapp2.RequestHandler):
+    def get(self):
         self.response.write("hello")
+
+class ResetAndSeedHandler(webapp2.RequestHandler):
+    def get(self):
+        query = Business.all(keys_only=True)
+        entries = query.fetch(1000)
+        db.delete(entries)
+
+        query = FoodItem.all(keys_only=True)
+        entries = query.fetch(1000)
+        db.delete(entries)
+
+        a_business = Business(name=BUSINESS_NAME).put()
+
+        test_food_item = FoodItem(name='test', cost=1.1, business_key=str(a_business)).put()
+        test_food_item_2 = FoodItem(name='test2', cost=1.2, business_key=str(a_business)).put()
+
+        a_receipt = Receipt(name='test_receipt').put()
+
+        ReceiptsFoodItems(food_item_key=str(test_food_item), receipt_key=str(a_receipt)).put()
+        ReceiptsFoodItems(food_item_key=str(test_food_item_2), receipt_key=str(a_receipt)).put()
+
+class BatchReviewHandler(webapp2.RequestHandler):
+    def post(self):
+        data = self.request.get('data')
+        self.response.write("success")
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
@@ -60,5 +127,7 @@ app = webapp2.WSGIApplication([
     ('/review/food', ReviewFoodHandler),
     ('/review/server', ReviewServerHandler),
     ('/review/*', ReviewGeneralHandler),
-    ('/analyze', AnalyzeHandler)
+    ('/review', ReviewHandler),
+    ('/batch_reviews', BatchReviewHandler),
+    ('/reset_and_seed', ResetAndSeedHandler)
 ], debug=True)
