@@ -21,6 +21,8 @@ import logging
 
 from models import *
 
+BUSINESS_NAME = 'Gecko Gecko'
+
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
@@ -32,11 +34,9 @@ query = FoodItem.all(keys_only=True)
 entries = query.fetch(1000)
 db.delete(entries)
 
-Business(name='Eureka').put()
+a_business = Business(name=BUSINESS_NAME).put()
 
-a_business = Business.all().get()
-
-FoodItem(name='test', cost=1.1, business_id=a_business.key().id())
+FoodItem(name='test', cost=1.1, business_name=BUSINESS_NAME).put()
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -54,16 +54,26 @@ class ReviewHandler(webapp2.RequestHandler):
 
 class AnalyzeHandler(webapp2.RequestHandler):
     def get(self):
-        business_id = self.request.get("id")
+        business_name = Business.all().filter('name =', BUSINESS_NAME).get().name
         template_values = {}
-        template_values['business_id'] = business_id
-        template_values['food_items'] = FoodItem.all().filter('business_id =',business_id)
+        template_values['food_items'] = FoodItem.gql("WHERE business_name = :1", business_name)
         template = jinja_environment.get_template("analyze.html")
         self.response.out.write(template.render(template_values))
+
+class FoodHandler(webapp2.RequestHandler):
+    def get(self):
+        self.response.write("hello")
+
+class BatchReviewHandler(webapp2.RequestHandler):
+    def post(self):
+        data = self.request.get('data')
+        self.response.write("success")
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/receipt', ReceiptHandler),
     ('/review', ReviewHandler),
-    ('/analyze', AnalyzeHandler)
+    ('/analyze', AnalyzeHandler),
+    ('/food', FoodHandler),
+    ('/batch_reviews', BatchReviewHandler)
 ], debug=True)
