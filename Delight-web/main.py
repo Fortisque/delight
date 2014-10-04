@@ -22,6 +22,8 @@ import json
 import urllib2
 from datetime import datetime, date, timedelta
 from collections import defaultdict
+import random
+from math import floor
 
 from models import *
 
@@ -191,25 +193,31 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
         receipt_key = str(a_receipt)
         data = [
             {
-                'stars': 5,
                 'comment': 'great',
                 'food_item_key': str(test_food_item),
                 'kind': 'food'
             },
             {
-                'stars': 1,
+                'comment': 'nice',
+                'food_item_key': str(test_food_item),
+                'kind': 'food'
+            },
+            {
                 'comment': 'terrible',
                 'food_item_key': str(test_food_item_2),
                 'kind': 'food'
             },
             {
-                'stars': 3,
+                'comment': 'edible',
+                'food_item_key': str(test_food_item),
+                'kind': 'food'
+            },
+            {
                 'comment': 'nice place',
                 'food_item_key': '',
                 'kind': 'general'
             },
             {
-                'stars': 5,
                 'comment': 'love it',
                 'food_item_key': '',
                 'kind': 'general'
@@ -217,7 +225,12 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         ]
         for review in data:
-            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=str(a_business)).put()
+            i = 0
+            value = random.random() * 10 + 10
+            while(i < value):
+                review['stars'] = int(floor(random.random()*5 + 1))
+                i += 1
+                Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=str(a_business)).put()
 
         self.response.write("success")
 
