@@ -80,7 +80,7 @@ class ReviewGeneralHandler(webapp2.RequestHandler):
     def get(self):
         template_values = {}
 
-        
+
         template = jinja_environment.get_template("general.html")
         self.response.out.write(template.render(template_values))
 
@@ -157,11 +157,13 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
             {
                 'stars': 3,
                 'comment': 'nice place',
+                'food_item_key': '',
                 'kind': 'general'
             },
             {
                 'stars': 5,
                 'comment': 'love it',
+                'food_item_key': '',
                 'kind': 'general'
             }
 
@@ -187,7 +189,6 @@ app = webapp2.WSGIApplication([
     ('/review/food', ReviewFoodHandler),
     ('/review/server', ReviewServerHandler),
     ('/review/*', ReviewGeneralHandler),
-    ('/review', ReviewHandler),
     ('/batch_reviews', BatchReviewHandler),
     ('/reset_and_seed', ResetAndSeedHandler)
 ], debug=True)
