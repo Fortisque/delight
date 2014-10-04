@@ -142,6 +142,30 @@ class ReviewFoodHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template("food.html")
         self.response.out.write(template.render(template_values))
 
+class ReviewDishHandler(webapp2.RequestHandler):
+    def get(self):
+        template_values = {}
+
+        template_values['name'] = self.request.get('name')
+
+        today = datetime.today()
+        yesterday = today - timedelta(1)
+        lower_limit = self.request.get('lower_date') or yesterday
+        upper_limit = self.request.get('upper_date') or today
+
+        business = Business.all().filter('name =', BUSINESS_NAME).get()
+        food_item = FoodItem.gql("WHERE name = :1 AND business_key = :2", template_values['name'], str(business.key())).get()
+        reviews = Review.gql("WHERE business_key = :1 AND target = :2 AND created_at > :3 AND created_at < :4", str(business.key()), str(food_item.key()), lower_limit, upper_limit)
+
+        star_count = defaultdict(int)
+        for review in reviews:
+            star_count[review.stars] += 1
+
+        template_values['reviews'] = reviews
+        template_values['star_count'] = star_count
+        template = jinja_environment.get_template("dish.html")
+        self.response.out.write(template.render(template_values))
+
 class ReviewServerHandler(webapp2.RequestHandler):
     def get(self):
         template_values = {}
@@ -294,6 +318,7 @@ app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/receipt', ReceiptHandler),
     ('/review/food', ReviewFoodHandler),
+    ('/review/food/dish', ReviewDishHandler),
     ('/review/server', ReviewServerHandler),
     ('/review/*', ReviewGeneralHandler),
     ('/batch_reviews', BatchReviewHandler),
