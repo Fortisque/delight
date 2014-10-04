@@ -84,13 +84,13 @@ class ReceiptHandler(webapp2.RequestHandler):
 class ReviewGeneralHandler(webapp2.RequestHandler):
     def get(self):
         template_values = {}
-        tomorrow = date.today() + timedelta(1)
-        yesterday = date.today() - timedelta(1)
-        lower_limit = self.request.get('lower_date') or yesterday.strftime('%y-%m-%d')
-        upper_limit = self.request.get('upper_date') or tomorrow.strftime('%y-%m-%d')
+        today = datetime.today()
+        yesterday = today - timedelta(1)
+        lower_limit = self.request.get('lower_date') or yesterday
+        upper_limit = self.request.get('upper_date') or today
 
         business = Business.all().filter('name =', BUSINESS_NAME).get()
-        reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2", str(business.key()), 'general')
+        reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(business.key()), 'general', lower_limit, upper_limit)
 
         star_count = defaultdict(int)
         for review in reviews:
@@ -199,7 +199,7 @@ class BatchReviewHandler(webapp2.RequestHandler):
         receipt = Receipt.get(receipt_key)
 
         for review in data:
-            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind=review['kind'], business_key=business_key).put()
+            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.write("success")
