@@ -116,6 +116,18 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
         entries = query.fetch(1000)
         db.delete(entries)
 
+        query = ReceiptsFoodItems.all(keys_only=True)
+        entries = query.fetch(1000)
+        db.delete(entries)
+
+        query = Receipt.all(keys_only=True)
+        entries = query.fetch(1000)
+        db.delete(entries)
+
+        query = Review.all(keys_only=True)
+        entries = query.fetch(1000)
+        db.delete(entries)
+
         a_business = Business(name=BUSINESS_NAME).put()
 
         test_food_item = FoodItem(name='test', cost=1.1, business_key=str(a_business)).put()
@@ -143,7 +155,7 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         ]
         for review in data:
-            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['key'], receipt_key=receipt_key, kind=review['kind']).put()
+            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['key'], receipt_key=receipt_key, kind=review['kind']).put()
 
 class BatchReviewHandler(webapp2.RequestHandler):
     def get(self):
