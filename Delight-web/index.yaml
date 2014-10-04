@@ -21,3 +21,9 @@ indexes:
   - name: food_item_key
   - name: kind_of_review
   - name: created_at
+
+- kind: Review
+  properties:
+  - name: kind_of_review
+  - name: target
+  - name: created_at

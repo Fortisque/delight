@@ -36,7 +36,7 @@ def gql_json_parser(query_obj):
     result = []
     for entry in query_obj:
         properties = dict([(p, unicode(getattr(entry, p))) for p in entry.properties()])
-        properties['key'] = str(entry.key())
+        properties['target'] = str(entry.key())
         result.append(properties)
 
     return result
@@ -62,7 +62,7 @@ class ReceiptHandler(webapp2.RequestHandler):
         food_item_keys = []
         template_values['food_items'] = []
         for food_item_receipt in ReceiptsFoodItems.gql("WHERE receipt_key = :1", receipt_key):
-            food_item_keys.append(food_item_receipt.food_item_key)
+            food_item_keys.append(food_item_receipt.target)
 
         query_data = FoodItem.get(food_item_keys)
 
@@ -117,7 +117,7 @@ class ReviewFoodHandler(webapp2.RequestHandler):
 
         food_items = {}
         for food_item in FoodItem.gql("WHERE business_key = :1", str(business.key())):
-            reviews = Review.gql("WHERE food_item_key = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(food_item.key()), 'food', lower_limit, upper_limit)
+            reviews = Review.gql("WHERE target = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(food_item.key()), 'food', lower_limit, upper_limit)
             star_count = defaultdict(int)
             summation = 0
             count = 0
@@ -143,6 +143,36 @@ class ReviewFoodHandler(webapp2.RequestHandler):
 class ReviewServerHandler(webapp2.RequestHandler):
     def get(self):
         template_values = {}
+
+        today = datetime.today()
+        yesterday = today - timedelta(1)
+        lower_limit = self.request.get('lower_date') or yesterday
+        upper_limit = self.request.get('upper_date') or today
+
+        business = Business.all().filter('name =', BUSINESS_NAME).get()
+
+        food_items = {}
+        for food_item in FoodItem.gql("WHERE business_key = :1", str(business.key())):
+            reviews = Review.gql("WHERE target = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(food_item.key()), 'food', lower_limit, upper_limit)
+            star_count = defaultdict(int)
+            summation = 0
+            count = 0
+            for review in reviews:
+                star_count[review.stars] += 1
+                count += 1
+                summation += review.stars
+
+            if count == 0:
+                count = 1
+            average = summation * 1.0 / count
+            food_items[food_item.name] = {
+                "average": average,
+                "key": str(food_item.key()),
+                "star_count": star_count
+            }
+
+        template_values['food_items'] = json.dumps(food_items)
+
         template = jinja_environment.get_template("server.html")
         self.response.out.write(template.render(template_values))
 
@@ -194,35 +224,44 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
         data = [
             {
                 'comment': 'great',
-                'food_item_key': str(test_food_item),
+                'target': str(test_food_item),
                 'kind': 'food'
             },
             {
                 'comment': 'nice',
-                'food_item_key': str(test_food_item),
+                'target': str(test_food_item),
                 'kind': 'food'
             },
             {
                 'comment': 'terrible',
-                'food_item_key': str(test_food_item_2),
+                'target': str(test_food_item_2),
                 'kind': 'food'
             },
             {
                 'comment': 'edible',
-                'food_item_key': str(test_food_item),
+                'target': str(test_food_item),
                 'kind': 'food'
             },
             {
                 'comment': 'nice place',
-                'food_item_key': '',
+                'target': '',
                 'kind': 'general'
             },
             {
                 'comment': 'love it',
-                'food_item_key': '',
+                'target': '',
                 'kind': 'general'
+            },
+            {
+                'comment': 'hi bob',
+                'target': '',
+                'kind': 'service'
+            },
+            {
+                'comment': 'hi jim',
+                'target': '',
+                'kind': 'service'
             }
-
         ]
         for review in data:
             i = 0
@@ -230,7 +269,7 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
             while(i < value):
                 review['stars'] = int(floor(random.random()*5 + 1))
                 i += 1
-                Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=str(a_business)).put()
+                Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=str(a_business)).put()
 
         self.response.write("success")
 
@@ -242,7 +281,7 @@ class BatchReviewHandler(webapp2.RequestHandler):
         receipt = Receipt.get(receipt_key)
 
         for review in data:
-            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
+            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.write("success")
