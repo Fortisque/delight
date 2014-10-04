@@ -19,8 +19,24 @@ import jinja2
 import os
 import logging
 
+from models import *
+
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+
+query = Business.all(keys_only=True)
+entries = query.fetch(1000)
+db.delete(entries)
+
+query = FoodItem.all(keys_only=True)
+entries = query.fetch(1000)
+db.delete(entries)
+
+Business(name='Eureka').put()
+
+a_business = Business.all().get()
+
+FoodItem(name='test', cost=1.1, business_id=a_business.key().id())
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -38,7 +54,12 @@ class ReviewHandler(webapp2.RequestHandler):
 
 class AnalyzeHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write("hello")
+        business_id = self.request.get("id")
+        template_values = {}
+        template_values['business_id'] = business_id
+        template_values['food_items'] = FoodItem.all().filter('business_id =',business_id)
+        template = jinja_environment.get_template("analyze.html")
+        self.response.out.write(template.render(template_values))
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
