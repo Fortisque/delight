@@ -20,8 +20,9 @@ class Review(db.Model):
     comment = db.TextProperty()
     kind_of_review = db.StringProperty(required=True)
     created_at = db.DateTimeProperty(required=True)
-    food_item_key = db.StringProperty()
+    target = db.StringProperty()
     receipt_key = db.StringProperty(required=True)
+    business_key = db.StringProperty(required=True)
 
 class FoodItem(db.Model):
     name = db.StringProperty(required=True)
