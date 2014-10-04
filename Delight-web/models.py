@@ -22,6 +22,7 @@ class Review(db.Model):
     created_at = db.DateTimeProperty(required=True)
     food_item_key = db.StringProperty()
     receipt_key = db.StringProperty(required=True)
+    business_key = db.StringProperty(required=True)
 
 class FoodItem(db.Model):
     name = db.StringProperty(required=True)

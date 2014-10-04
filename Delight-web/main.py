@@ -20,7 +20,8 @@ import os
 import logging
 import json as simplejson
 import urllib2
-import datetime
+from datetime import datetime, date, timedelta
+from collections import defaultdict
 
 from models import *
 
@@ -46,6 +47,9 @@ class MainHandler(webapp2.RequestHandler):
 
 class ReceiptHandler(webapp2.RequestHandler):
     def get(self):
+
+        business = Business.all().filter('name =', BUSINESS_NAME).get()
+
         receipt_key = self.request.get('id')
 
         receipt = Receipt.all().get()
@@ -63,13 +67,14 @@ class ReceiptHandler(webapp2.RequestHandler):
         json_data = {
             'website': 'delight-food.appspot.com',
             'data': simplejson.dumps(gql_json_parser(query_data)),
-            'receipt_key': receipt_key
+            'receipt_key': receipt_key,
+            'business_name': business.name,
+            'business_key': str(business.key())
         }
 
         template_values['food_items'] = query_data
         template_values['json_query_data'] = json_data
         template_values['QR_url'] = 'http://api.qrserver.com/v1/create-qr-code/?data=%s&size=100x100' % (template_values['json_query_data'],)
-        template_values['QR_data'] = urllib2.urlopen(template_values['QR_url']).read()
         template = jinja_environment.get_template("receipt.html")
         self.response.out.write(template.render(template_values))
 
@@ -79,8 +84,21 @@ class ReceiptHandler(webapp2.RequestHandler):
 class ReviewGeneralHandler(webapp2.RequestHandler):
     def get(self):
         template_values = {}
+        tomorrow = date.today() + timedelta(1)
+        yesterday = date.today() - timedelta(1)
+        lower_limit = self.request.get('lower_date') or yesterday.strftime('%y-%m-%d')
+        upper_limit = self.request.get('upper_date') or tomorrow.strftime('%y-%m-%d')
+
+        business = Business.all().filter('name =', BUSINESS_NAME).get()
+        reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2", str(business.key()), 'general')
+
+        star_count = defaultdict(int)
+        for review in reviews:
+            star_count[review.stars] += 1
 
 
+        template_values['reviews'] = reviews
+        template_values['star_count'] = star_count
         template = jinja_environment.get_template("general.html")
         self.response.out.write(template.render(template_values))
 
@@ -169,16 +187,19 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         ]
         for review in data:
-            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind_of_review=review['kind']).put()
+            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=str(a_business)).put()
+
+        self.response.write("success")
 
 class BatchReviewHandler(webapp2.RequestHandler):
     def get(self):
         data = self.request.get('data')
         receipt_key = self.request.get('receipt_key')
+        business_key = self.request.get('business_key')
         receipt = Receipt.get(receipt_key)
 
         for review in data:
-            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind=review['kind']).put()
+            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind=review['kind'], business_key=business_key).put()
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.write("success")
