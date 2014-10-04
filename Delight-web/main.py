@@ -20,6 +20,7 @@ import os
 import logging
 import json as simplejson
 import urllib2
+import datetime
 
 from models import *
 
@@ -31,7 +32,10 @@ jinja_environment = jinja2.Environment(
 def gql_json_parser(query_obj):
     result = []
     for entry in query_obj:
-        result.append(dict([(p, unicode(getattr(entry, p))) for p in entry.properties()]))
+        properties = dict([(p, unicode(getattr(entry, p))) for p in entry.properties()])
+        properties['key'] = str(entry.key())
+        result.append(properties)
+
     return result
 
 class MainHandler(webapp2.RequestHandler):
@@ -45,19 +49,25 @@ class ReceiptHandler(webapp2.RequestHandler):
         receipt_key = self.request.get('id')
 
         receipt = Receipt.all().get()
-        receipt_key = receipt.key()
+        receipt_key = str(receipt.key())
 
         template_values = {}
 
         food_item_keys = []
         template_values['food_items'] = []
-        for food_item_receipt in ReceiptsFoodItems.gql("WHERE receipt_key = :1", str(receipt_key)):
+        for food_item_receipt in ReceiptsFoodItems.gql("WHERE receipt_key = :1", receipt_key):
             food_item_keys.append(food_item_receipt.food_item_key)
 
         query_data = FoodItem.get(food_item_keys)
 
+        json_data = {
+            'website': 'delight-food.appspot.com',
+            'data': simplejson.dumps(gql_json_parser(query_data)),
+            'receipt_key': receipt_key
+        }
+
         template_values['food_items'] = query_data
-        template_values['json_query_data'] = simplejson.dumps(gql_json_parser(query_data))
+        template_values['json_query_data'] = json_data
         template_values['QR_url'] = 'http://api.qrserver.com/v1/create-qr-code/?data=%s&size=100x100' % (template_values['json_query_data'],)
         template_values['QR_data'] = urllib2.urlopen(template_values['QR_url']).read()
         template = jinja_environment.get_template("receipt.html")
@@ -102,9 +112,35 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
         ReceiptsFoodItems(food_item_key=str(test_food_item), receipt_key=str(a_receipt)).put()
         ReceiptsFoodItems(food_item_key=str(test_food_item_2), receipt_key=str(a_receipt)).put()
 
+        receipt_key = str(a_receipt)
+        data = [
+            {
+                'stars': 5,
+                'comment': 'great',
+                'key': str(test_food_item),
+                'kind': 'food'
+            },
+            {
+                'stars': 1,
+                'comment': 'terrible',
+                'key': str(test_food_item_2),
+                'kind': 'food'
+            }
+
+        ]
+        for review in data:
+            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['key'], receipt_key=receipt_key, kind=review['kind']).put()
+
 class BatchReviewHandler(webapp2.RequestHandler):
-    def post(self):
+    def get(self):
         data = self.request.get('data')
+        receipt_key = self.request.get('receipt_key')
+        receipt = Receipt.get(receipt_key)
+
+        for review in data:
+            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['key'], receipt_key=receipt_key, kind=review['kind']).put()
+
+        self.response.headers['Content-Type'] = 'application/json'
         self.response.write("success")
 
 app = webapp2.WSGIApplication([

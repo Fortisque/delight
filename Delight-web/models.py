@@ -17,9 +17,10 @@ class User(db.Model):
 
 class Review(db.Model):
     stars = db.IntegerProperty(required=True)
-    comment = db.TextProperty(required=True)
+    comment = db.TextProperty()
     created_at = db.DateTimeProperty(required=True)
-    receipts_food_item_key = db.StringProperty(required=True)
+    food_item_key = db.StringProperty(required=True)
+    receipt_key = db.StringProperty(required=True)
 
 class FoodItem(db.Model):
     name = db.StringProperty(required=True)
