@@ -76,9 +76,23 @@ class ReceiptHandler(webapp2.RequestHandler):
     def post(self):
         self.response.write("hello")
 
-class ReviewHandler(webapp2.RequestHandler):
+class ReviewGeneralHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write("hello")
+        template_values = {}
+        template = jinja_environment.get_template("general.html")
+        self.response.out.write(template.render(template_values))
+
+class ReviewFoodHandler(webapp2.RequestHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template("food.html")
+        self.response.out.write(template.render(template_values))
+
+class ReviewServerHandler(webapp2.RequestHandler):
+    def get(self):
+        template_values = {}
+        template = jinja_environment.get_template("server.html")
+        self.response.out.write(template.render(template_values))
 
 class AnalyzeHandler(webapp2.RequestHandler):
     def get(self):
@@ -146,9 +160,10 @@ class BatchReviewHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/receipt', ReceiptHandler),
+    ('/review/food', ReviewFoodHandler),
+    ('/review/server', ReviewServerHandler),
+    ('/review/*', ReviewGeneralHandler),
     ('/review', ReviewHandler),
-    ('/analyze', AnalyzeHandler),
-    ('/food', FoodHandler),
     ('/batch_reviews', BatchReviewHandler),
     ('/reset_and_seed', ResetAndSeedHandler)
 ], debug=True)
