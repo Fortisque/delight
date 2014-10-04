@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="UTF-8">
-	<title>Delight</title>
-</head>
-<body>
-	<h1> Delight </h1>
-	<h2> Gecko Gecko </h2>
-	
-</body>
-</html>
+{% extends "base.html" %}
+{% block body %}
+	<h1> Dashboard </h1>
+	<a href="/review/general"> General </a>
+	<a href="/review/food"> Food </a>
+	<a href="/review/server"> Server </a>
+{% endblock %}
