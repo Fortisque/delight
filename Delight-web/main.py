@@ -36,7 +36,7 @@ def gql_json_parser(query_obj):
     result = []
     for entry in query_obj:
         properties = dict([(p, unicode(getattr(entry, p))) for p in entry.properties()])
-        properties['target'] = str(entry.key())
+        properties['key'] = str(entry.key())
         result.append(properties)
 
     return result
@@ -62,7 +62,7 @@ class ReceiptHandler(webapp2.RequestHandler):
         food_item_keys = []
         template_values['food_items'] = []
         for food_item_receipt in ReceiptsFoodItems.gql("WHERE receipt_key = :1", receipt_key):
-            food_item_keys.append(food_item_receipt.target)
+            food_item_keys.append(food_item_receipt.food_item_key)
 
         query_data = FoodItem.get(food_item_keys)
 
@@ -281,7 +281,7 @@ class BatchReviewHandler(webapp2.RequestHandler):
         receipt = Receipt.get(receipt_key)
 
         for review in data:
-            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
+            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.write("success")
