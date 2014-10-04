@@ -9,9 +9,7 @@
         <div>{{review.comment}}</div>
     {% endfor %}
 
-    {% for key in star_count %}
-        <div>{{key}}: {{star_count[key]}}</div>
-    {% endfor %}
+    {{star_count}}
 
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 

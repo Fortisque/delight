@@ -18,7 +18,7 @@ import webapp2
 import jinja2
 import os
 import logging
-import json as simplejson
+import json
 import urllib2
 from datetime import datetime, date, timedelta
 from collections import defaultdict
@@ -66,7 +66,7 @@ class ReceiptHandler(webapp2.RequestHandler):
 
         json_data = {
             'website': 'delight-food.appspot.com',
-            'data': simplejson.dumps(gql_json_parser(query_data)),
+            'data': json.dumps(gql_json_parser(query_data)),
             'receipt_key': receipt_key,
             'business_name': business.name,
             'business_key': str(business.key())
@@ -98,7 +98,7 @@ class ReviewGeneralHandler(webapp2.RequestHandler):
 
 
         template_values['reviews'] = reviews
-        template_values['star_count'] = star_count
+        template_values['star_count'] = json.dumps(star_count)
         template = jinja_environment.get_template("general.html")
         self.response.out.write(template.render(template_values))
 
