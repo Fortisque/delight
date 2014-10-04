@@ -25,10 +25,10 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.buttonFoodReview) {
-			Intent intent = new Intent(this, FoodSelectionActivity.class);
+			Intent intent = new Intent(this, FoodReviewActivity.class);
 			startActivity(intent);
 		} else if (v.getId() == R.id.buttonServiceReview) {
-			Intent intent = new Intent(this, FoodSelectionActivity.class);
+			Intent intent = new Intent(this, FoodReviewActivity.class);
 			startActivity(intent);
 		}
 	}
