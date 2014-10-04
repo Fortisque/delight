@@ -105,6 +105,36 @@ class ReviewGeneralHandler(webapp2.RequestHandler):
 class ReviewFoodHandler(webapp2.RequestHandler):
     def get(self):
         template_values = {}
+
+        today = datetime.today()
+        yesterday = today - timedelta(1)
+        lower_limit = self.request.get('lower_date') or yesterday
+        upper_limit = self.request.get('upper_date') or today
+
+        business = Business.all().filter('name =', BUSINESS_NAME).get()
+
+        food_items = {}
+        for food_item in FoodItem.gql("WHERE business_key = :1", str(business.key())):
+            reviews = Review.gql("WHERE food_item_key = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(food_item.key()), 'food', lower_limit, upper_limit)
+            star_count = defaultdict(int)
+            summation = 0
+            count = 0
+            for review in reviews:
+                star_count[review.stars] += 1
+                count += 1
+                summation += review.stars
+
+            if count == 0:
+                count = 1
+            average = summation * 1.0 / count
+            food_items[food_item.name] = {
+                "average": average,
+                "key": str(food_item.key()),
+                "star_count": star_count
+            }
+
+        template_values['food_items'] = json.dumps(food_items)
+
         template = jinja_environment.get_template("food.html")
         self.response.out.write(template.render(template_values))
 
