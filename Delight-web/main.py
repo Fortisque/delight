@@ -131,6 +131,8 @@ class ReviewFoodHandler(webapp2.RequestHandler):
             average = summation * 1.0 / count
             food_items[food_item.name] = {
                 "average": average,
+                "picture": food_item.picture,
+                "total": count,
                 "key": str(food_item.key()),
                 "star_count": star_count
             }
@@ -167,6 +169,7 @@ class ReviewServerHandler(webapp2.RequestHandler):
             average = summation * 1.0 / count
             food_items[food_item.name] = {
                 "average": average,
+                "total": count,
                 "key": str(food_item.key()),
                 "star_count": star_count
             }
@@ -212,8 +215,9 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         a_business = Business(name=BUSINESS_NAME).put()
 
-        test_food_item = FoodItem(name='test', cost=1.1, business_key=str(a_business)).put()
-        test_food_item_2 = FoodItem(name='test2', cost=1.2, business_key=str(a_business)).put()
+        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=10.0, business_key=str(a_business)).put()
+        test_food_item_2 = FoodItem(name='Pad Thai', cost=9.75, business_key=str(a_business)).put()
+        test_food_item_3 = FoodItem(name='Pad See ew', cost=8.75, business_key=str(a_business)).put()
 
         a_receipt = Receipt(name='test_receipt').put()
 
@@ -239,7 +243,7 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
             },
             {
                 'comment': 'edible',
-                'target': str(test_food_item),
+                'target': str(test_food_item_3),
                 'kind': 'food'
             },
             {
