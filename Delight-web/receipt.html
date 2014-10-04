@@ -6,8 +6,11 @@
 </head>
 <body>
   {% for food_item in food_items %}
-    {{food_item.name}}
+    <div>{{food_item.name}}</div>
+    <div>{{food_item.cost}}</div>
   {% endfor %}
-  
+  {{json_query_data}}
+
+  <div><img src='{{QR_url}}' /></div>
 </body>
 </html>
