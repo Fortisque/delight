@@ -79,6 +79,8 @@ class ReceiptHandler(webapp2.RequestHandler):
 class ReviewGeneralHandler(webapp2.RequestHandler):
     def get(self):
         template_values = {}
+
+        
         template = jinja_environment.get_template("general.html")
         self.response.out.write(template.render(template_values))
 
@@ -143,19 +145,29 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
             {
                 'stars': 5,
                 'comment': 'great',
-                'key': str(test_food_item),
+                'food_item_key': str(test_food_item),
                 'kind': 'food'
             },
             {
                 'stars': 1,
                 'comment': 'terrible',
-                'key': str(test_food_item_2),
+                'food_item_key': str(test_food_item_2),
                 'kind': 'food'
+            },
+            {
+                'stars': 3,
+                'comment': 'nice place',
+                'kind': 'general'
+            },
+            {
+                'stars': 5,
+                'comment': 'love it',
+                'kind': 'general'
             }
 
         ]
         for review in data:
-            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['key'], receipt_key=receipt_key, kind=review['kind']).put()
+            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind_of_review=review['kind']).put()
 
 class BatchReviewHandler(webapp2.RequestHandler):
     def get(self):
@@ -164,7 +176,7 @@ class BatchReviewHandler(webapp2.RequestHandler):
         receipt = Receipt.get(receipt_key)
 
         for review in data:
-            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['key'], receipt_key=receipt_key, kind=review['kind']).put()
+            Receipt(stars=review['stars'], comment=review['comment'], created_at=datetime.datetime.now(), food_item_key=review['food_item_key'], receipt_key=receipt_key, kind=review['kind']).put()
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.write("success")
