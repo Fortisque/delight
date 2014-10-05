@@ -113,13 +113,13 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 				}
 			});
 
-			if (review.getComment() != "") {
+			if (review.getComment() != null) {
 				commentButton.setVisibility(View.GONE);
 				commentBox.setVisibility(View.VISIBLE);
 				commentBox.setText(review.getComment());
 			}
 
-			if (review.getRating() != -1) {
+			if (review.getRating() != 0) {
 				System.out.println(review.getName() + " rating: "+ review.getRating());
 				rating.setRating(Float.valueOf(review.getRating()));
 			} else {
