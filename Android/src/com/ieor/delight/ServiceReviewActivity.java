@@ -18,6 +18,7 @@ import android.widget.GridView;
 public class ServiceReviewActivity extends Activity implements OnItemClickListener {
 	
 	GridView gridView;
+	TextView text;
 	WaiterAdapter adapter;
 	ArrayList<WaiterCell> waiters;
 	public final static int REVIEW_CODE = 1;
@@ -27,7 +28,9 @@ public class ServiceReviewActivity extends Activity implements OnItemClickListen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_service_reviews);
 		createCutomActionBarTitle();
-		
+		text = (TextView) findViewById(R.id.textViewServer);
+		Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/Oswald_Regular.otf");
+		text.setTypeface(tf);
 		gridView = (GridView) findViewById(R.id.gridViewWaiters);
 		populateWaiters();
 		adapter = new WaiterAdapter(this, waiters);

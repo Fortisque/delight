@@ -45,21 +45,10 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/buttonGeneral"
-            style="@style/menuButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/menu_button"
-            android:text="General Experience"
-            android:textColor="@drawable/menu_button_color" />
-
-        <Button
             android:id="@+id/buttonFoodReview"
             style="@style/menuButton"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="1dp"
             android:layout_weight="1"
             android:background="@drawable/menu_button"
             android:text="Your Order"
@@ -74,6 +63,17 @@
             android:layout_weight="1"
             android:background="@drawable/menu_button"
             android:text="Your Server"
+            android:textColor="@drawable/menu_button_color" />
+        
+        <Button
+            android:id="@+id/buttonGeneral"
+            style="@style/menuButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/menu_button"
+            android:text="General Experience"
             android:textColor="@drawable/menu_button_color" />
 
         <Button
