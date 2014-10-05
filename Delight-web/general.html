@@ -36,6 +36,7 @@
         function onReady() {
           google.visualization.events.addListener(wrapper, 'select', selectHandler);
         }
+
         var oTable = $('#datatable').dataTable();
         function selectHandler() {
           var selectedItem = wrapper.getChart().getSelection()[0];
