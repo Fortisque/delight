@@ -1,15 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
-    
-    <h1> Dashboard </h1>
+  <h1> Dashboard </h1>
     <a href="/review/"> General </a>
     <a href="/review/food"> Food </a>
     <a href="/review/server"> Server </a>
 
-    
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <h2>Analysis on {{name}}</h2>
 
-	<h2> general </h2>
     <div id="vis_div"></div>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
@@ -28,10 +25,8 @@
       }
     </script>
 
+    
     {% for review in reviews %}
-        <div>{{review.comment}}</div>
+      <div>{{review.comment}}</div>
     {% endfor %}
-
-    {{star_count}}
-
 {% endblock %}
