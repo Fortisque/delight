@@ -1,29 +1,33 @@
 package com.ieor.delight;
 
-import java.util.Arrays;
-
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 
 public class WaiterCell implements Parcelable {
 
+	private String key;
 	private String name;
 	private String imageUrl; //use resource path for mock
 	private String comment;
 	private float rating;
 	
-	public WaiterCell(String name, String image){
+	public WaiterCell(String key, String name, String image){
+		this.key = key;
 		this.name = name;
 		this.imageUrl = image;
 	}
 	
 	public WaiterCell(Parcel in) {
+		this.key = in.readString();
 		this.name = in.readString();
 		this.imageUrl = in.readString();
 		this.comment = in.readString();
 		this.rating = in.readFloat();
 	} 
+	
+	public String getKey(){
+		return key;
+	}
 	
 	public String getName(){
 		return name;
@@ -51,8 +55,8 @@ public class WaiterCell implements Parcelable {
 
 	public static final Parcelable.Creator<WaiterCell> CREATOR = new Creator<WaiterCell>() {
 		public WaiterCell createFromParcel(Parcel source) {
-			WaiterCell mSchedule = new WaiterCell(source);
-			return mSchedule;
+			WaiterCell waiter = new WaiterCell(source);
+			return waiter;
 		}
 
 		public WaiterCell[] newArray(int size) {
@@ -67,6 +71,7 @@ public class WaiterCell implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeString(key);
 		parcel.writeString(name);
 		parcel.writeString(imageUrl);
 		parcel.writeString(comment);
@@ -77,6 +82,7 @@ public class WaiterCell implements Parcelable {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("***** Waiter Details *****\n");
+        sb.append("Key="+getKey()+"\n");
         sb.append("Name="+getName()+"\n");
         sb.append("Image="+getImage()+"\n");
         sb.append("Comment="+getComment()+"\n");

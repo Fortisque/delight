@@ -36,18 +36,15 @@
         android:layout_centerHorizontal="true"
         android:text="Comment" />
 
-    <EditText
-        android:id="@+id/editTextComment"
+    <TextView
+        android:id="@+id/textViewComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_below="@id/ratingBarFood"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="(comment)"
-        android:inputType="textMultiLine"
-        android:visibility="gone" >
-
-        <requestFocus />
-    </EditText>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Comment"
+        android:visibility="gone" />
 
 </RelativeLayout>
