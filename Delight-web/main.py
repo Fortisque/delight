@@ -326,7 +326,7 @@ app = webapp2.WSGIApplication([
     ('/review/food', ReviewFoodHandler),
     ('/review/food/dish', ReviewDishHandler),
     ('/review/server', ReviewServerHandler),
-    ('/review/*', ReviewGeneralHandler),
+    ('/review/', ReviewGeneralHandler),
     ('/batch_reviews', BatchReviewHandler),
     ('/reset_and_seed', ResetAndSeedHandler)
 ], debug=True)
