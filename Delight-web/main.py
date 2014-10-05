@@ -37,6 +37,8 @@ def gql_json_parser(query_obj):
     for entry in query_obj:
         properties = dict([(p, unicode(getattr(entry, p))) for p in entry.properties()])
         properties['key'] = str(entry.key())
+
+        del properties['business_key']
         result.append(properties)
 
     return result
