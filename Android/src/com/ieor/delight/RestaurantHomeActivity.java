@@ -12,9 +12,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.TypefaceSpan;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,6 +31,8 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 	
 	Button reviewFoodButton;
 	Button reviewServiceButton;
+	Button reviewGeneralButton;
+	Button doneButton;
 	TextView businessTitle;
 	
 	String businessName;
@@ -34,6 +43,7 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 	ArrayList<FoodReviewCell> foods;
 	
 	public final static int FOOD_REVIEW_CODE = 1;
+	public final static int SERVICE_REVIEW_CODE = 2;
 	
 	public String postUrl = "http://delight-food.appspot.com/batch_reviews";
 
@@ -52,13 +62,42 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
        	System.out.println("receiptKey: " + receiptKey);
        	sortData(jsonData);
        	
+       	createCutomActionBarTitle();
         businessTitle = (TextView)findViewById(R.id.textViewRestaurantName);
         businessTitle.setText(businessName);
+        
+       	Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/Oswald_Regular.otf");
         reviewFoodButton = (Button)findViewById(R.id.buttonFoodReview);
         reviewFoodButton.setOnClickListener(this);
+        reviewFoodButton.setTypeface(tf);
         reviewServiceButton = (Button)findViewById(R.id.buttonServiceReview);
         reviewServiceButton.setOnClickListener(this);
-    }
+        reviewServiceButton.setTypeface(tf);
+        reviewGeneralButton = (Button)findViewById(R.id.buttonGeneral);
+        reviewGeneralButton.setOnClickListener(this);
+        reviewGeneralButton.setTypeface(tf);
+        doneButton = (Button)findViewById(R.id.buttonDone);
+        doneButton.setOnClickListener(this);
+        doneButton.setTypeface(tf);
+	}
+	
+	 private void createCutomActionBarTitle(){
+    	ActionBar actionBar = getActionBar();
+    	actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+    	actionBar.setDisplayShowHomeEnabled(false); 
+    	actionBar.setDisplayShowCustomEnabled(true); 
+    	actionBar.setDisplayShowTitleEnabled(false);
+	    LayoutInflater inflator = LayoutInflater.from(this);
+	    View v = inflator.inflate(R.layout.custom_action_bar, null);
+	    Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/Wisdom_Script.otf");
+	    TextView title = (TextView)v.findViewById(R.id.textViewTitle);
+	    title.setText("Delight");
+	    title.setTypeface(tf);
+	    
+	    //assign the view to the actionbar
+	    LayoutParams layout = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+	    actionBar.setCustomView(v, layout);
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -68,12 +107,13 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 			startActivityForResult(intent, FOOD_REVIEW_CODE);
 		} else if (v.getId() == R.id.buttonServiceReview) {
 			Intent intent = new Intent(this, ServiceReviewActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent, SERVICE_REVIEW_CODE);
 		}
 	}
 
 	public void sortData(String data){
 		foods = new ArrayList<FoodReviewCell>();
+		int[] resources = {R.drawable.food1, R.drawable.food2};
 		try {
 			JSONArray array = new JSONArray(data);
 			for (int i = 0; i < array.length(); i++) {
@@ -81,7 +121,7 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 				String key = foodJson.getString("key");
 				String name = foodJson.getString("name");
 				String picture = foodJson.getString("picture");
-				FoodReviewCell food = new FoodReviewCell(key, name, picture);
+				FoodReviewCell food = new FoodReviewCell(key, name, resources[i%2]);
 				foods.add(food);
 			}
 		} catch (JSONException e) {
@@ -139,7 +179,13 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 
 					// add the request object to the queue to be executed
 					DelightApplication.getInstance().addToRequestQueue(req);
+					
+					doneButton.setVisibility(View.VISIBLE);
 				}
+				break;
+			}
+			case (SERVICE_REVIEW_CODE): {
+				doneButton.setVisibility(View.VISIBLE);
 				break;
 			}
 		}

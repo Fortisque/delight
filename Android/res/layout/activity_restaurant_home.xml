@@ -1,69 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey"
     android:orientation="vertical"
-    android:background="@color/dark_grey"
     android:weightSum="10" >
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/imageFrame"
         android:layout_width="fill_parent"
-        android:background="@color/white"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/eureka" />
 
         <TextView
             android:id="@+id/textViewRestaurantName"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@color/white"
-            android:text="Restaurant Name"
-            android:textColor="@color/black"
-            android:textSize="32sp" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/dark_grey"
+            android:padding="10dp"
+            android:text="TextView"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/imageFrame"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/buttonGeneral"
+            style="@style/menuButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/menu_button"
+            android:text="General Experience"
+            android:textColor="@drawable/menu_button_color" />
+
+        <Button
+            android:id="@+id/buttonFoodReview"
+            style="@style/menuButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/menu_button"
+            android:text="Your Order"
+            android:textColor="@drawable/menu_button_color" />
+
+        <Button
+            android:id="@+id/buttonServiceReview"
+            style="@style/menuButton"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/menu_button"
+            android:text="Your Server"
+            android:textColor="@drawable/menu_button_color" />
+
+        <Button
+            android:id="@+id/buttonDone"
+            style="@style/menuButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/turquoise"
+            android:text="Done"
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </LinearLayout>
-    
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:scaleType="center"
-        android:src="@drawable/eureka" />
 
-    <Button
-        android:id="@+id/buttonGeneral"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="2"
-        android:text="General"
-        style="@style/menuButton"
-        android:textColor="@drawable/menu_button_color"
-        android:background="@drawable/menu_button" />
-
-    <Button
-        android:id="@+id/buttonFoodReview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="2"
-        android:text="Food"
-        style="@style/menuButton"
-        android:textColor="@drawable/menu_button_color"
-        android:background="@drawable/menu_button" />
-
-    <Button
-        android:id="@+id/buttonServiceReview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="2"
-        android:text="Service"
-        style="@style/menuButton"
-        android:textColor="@drawable/menu_button_color"
-        android:background="@drawable/menu_button" />
-
-</LinearLayout>
+</RelativeLayout>
