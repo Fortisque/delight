@@ -341,7 +341,10 @@ class BatchReviewHandler(webapp2.RequestHandler):
             Review(stars=float(review['stars']), comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
 
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.write("success")
+        obj = {
+            'success': 'yes', 
+        } 
+        self.response.write(json.dumps(obj))
 
 app = webapp2.WSGIApplication([
     ('/', ReviewGeneralHandler),
