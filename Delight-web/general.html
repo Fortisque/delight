@@ -47,7 +47,43 @@
     </script>
 
 <h1>Comments</h1>
-<table class="table table-striped" id="datatable">
+
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
+
+<style> 
+    span.stars, span.stars span {
+        display: block;
+        background: url("/static/star.png") 0 -16px repeat-x;
+        width: 80px;
+        height: 16px;
+    }
+
+    span.stars span {
+        background-position: 0 0;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+<script>
+    $.fn.stars = function() {
+        return $(this).each(function() {
+            $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
+        });
+
+    }
+
+    $(function() {
+        $('span.stars').stars();
+    });
+</script>
+<table class="table table-striped compact" id="datatable">
   <thead>
     <tr>
       <th>Stars</th>
@@ -58,16 +94,11 @@
   <tbody>
     {% for review in reviews %}
       <tr>
-        <td>{{review.stars}}</td>
+        <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
         <td>{{review.comment}}</td>
-        <td>{{review.created_at}}</td>
+        <td>{{review.created_at.date()}}</td>
       </tr>
     {% endfor %}
   </tbody>
 </table>
-
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-
-<link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
 {% endblock %}
