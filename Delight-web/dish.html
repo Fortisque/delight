@@ -52,7 +52,7 @@
   <tbody>
     {% for review in reviews %}
       <tr>
-        <td>{{review.stars}}</td>
+        <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
         <td>{{review.comment}}</td>
         <td>{{review.created_at}}</td>
       </tr>
@@ -60,7 +60,6 @@
   </tbody>
 </table>
 
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
