@@ -330,13 +330,15 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 class BatchReviewHandler(webapp2.RequestHandler):
     def post(self):
         all_data = json.loads(self.request.body)
-        data = all_data['data']
+        data = json.loads(all_data['data'])
         receipt_key = all_data['receipt_key']
         business_key = all_data['business_key']
         receipt = Receipt.get(receipt_key)
 
         for review in data:
-            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
+            if 'comment' not in review:
+                review['comment'] = ''
+            Review(stars=float(review['stars']), comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.write("success")
