@@ -47,7 +47,7 @@ public class FoodReviewActivity extends ListActivity implements OnClickListener 
 		//mock data for now
 		reviews = new ArrayList<Row>();
 		for(int i = 1; i <= 12; i++){
-			FoodReviewCell food  = new FoodReviewCell(i, "Food " + i, "image" + i);
+			FoodReviewCell food  = new FoodReviewCell(i+ "", "Food " + i, "image" + i);
 			Row row = new Row(Row.REVIEW, food);
 			reviews.add(row);
 		}

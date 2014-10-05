@@ -2,7 +2,9 @@ package com.ieor.delight;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -67,56 +69,66 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 		
 		Row row = getItem(position);
 
-			LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = vi.inflate(R.layout.food_rating_cell, parent, false);
-//				System.out.println("creating new view holder for "
-//						+ reviews.get(position).review.getName());
-//				LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//				v = vi.inflate(R.layout.food_rating_cell, parent, false);
-//				holder = new ViewHolder(v);
-//				holder.name = (TextView) v.findViewById(R.id.textViewFoodName);
-//				holder.image = (ImageView) v.findViewById(R.id.imageViewFood);
-//				holder.rating = (RatingBar) v.findViewById(R.id.ratingBarFood);
-//				holder.commentBox = (EditText) v.findViewById(R.id.editTextComment);
-//				holder.commentButton = (Button) v.findViewById(R.id.buttonComment);
-//				v.setTag(holder);
+		LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		v = vi.inflate(R.layout.food_rating_cell, parent, false);
 		
 		TextView name = (TextView) v.findViewById(R.id.textViewFoodName);
 		ImageView image = (ImageView) v.findViewById(R.id.imageViewFood);
 		RatingBar rating = (RatingBar) v.findViewById(R.id.ratingBarFood);
-		final EditText commentBox = (EditText) v.findViewById(R.id.editTextComment);
+		final TextView comment = (TextView) v.findViewById(R.id.textViewComment);
 		final Button commentButton = (Button) v.findViewById(R.id.buttonComment);
 		
 		rating.setOnRatingBarChangeListener(null);
-		commentBox.addTextChangedListener(null);
-		commentBox.setOnClickListener(null);
 		commentButton.setOnClickListener(null);
 		
 		final FoodReviewCell review = reviews.get(position).review;
 		if (review != null) {
 			name.setText(review.getName());
-			commentBox.addTextChangedListener(new CustomTextWatcher(commentBox, review));
-			commentBox.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					System.out.println("requesting focus on " + v.toString());
-					InputMethodManager mgr = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
-					v.requestFocus();
-					mgr.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
-				}
-			});
 			commentButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					commentButton.setVisibility(View.GONE);
-					commentBox.setVisibility(View.VISIBLE);
+					LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+					View promptsView = li.inflate(R.layout.comment_dialog, null);
+	 
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+					alertDialogBuilder.setView(promptsView);
+
+					final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextComment);
+					
+					alertDialogBuilder.setTitle("Comment")
+							.setCancelable(false)
+							.setPositiveButton("OK",
+									new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface dialog, int id) {
+											String input = userInput.getText().toString();
+											if(input.length() != 0){
+												System.out.println("cofirm comment: "+ userInput.getText());
+												commentButton.setVisibility(View.GONE);
+												comment.setVisibility(View.VISIBLE);
+												comment.setText(userInput.getText());
+												review.setComment(userInput.getText().toString());
+											}
+										}
+									})
+							.setNegativeButton("Cancel",
+									new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface dialog, int id) {
+											dialog.cancel();
+										}
+									});
+	 
+					// create alert dialog
+					AlertDialog alertDialog = alertDialogBuilder.create();
+	 
+					// show it
+					alertDialog.show();
 				}
 			});
 
 			if (review.getComment() != null) {
 				commentButton.setVisibility(View.GONE);
-				commentBox.setVisibility(View.VISIBLE);
-				commentBox.setText(review.getComment());
+				comment.setVisibility(View.VISIBLE);
+				comment.setText(review.getComment());
 			}
 
 			if (review.getRating() != 0) {
@@ -197,29 +209,5 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 //		}
 
 		return v;
-	}
-
-	private class CustomTextWatcher implements TextWatcher {
-
-		private View view;
-		private FoodReviewCell review;
-
-		private CustomTextWatcher(View view, FoodReviewCell review) {
-			this.view = view;
-			this.review = review;
-		}
-
-		public void beforeTextChanged(CharSequence charSequence, int i, int i1,
-				int i2) {
-		}
-
-		public void onTextChanged(CharSequence charSequence, int i, int i1,
-				int i2) {
-		}
-
-		public void afterTextChanged(Editable editable) {
-			String text = editable.toString();
-			review.setComment(text);
-		}
 	}
 }

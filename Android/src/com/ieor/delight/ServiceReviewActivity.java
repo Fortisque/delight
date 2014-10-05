@@ -34,7 +34,7 @@ public class ServiceReviewActivity extends Activity implements OnItemClickListen
 		String[] names = {"Jessica", "Alice", "Nicole", "Jennifer", "Gavin", "Kevin", "David", "Lucy"};
 		waiters = new ArrayList<WaiterCell>();
 		for(int i = 0; i < 8; i++){
-			WaiterCell waiter = new WaiterCell(names[i], "imageurl");
+			WaiterCell waiter = new WaiterCell(i+"", names[i], "imageurl");
 			waiters.add(waiter);
 		}
 		
