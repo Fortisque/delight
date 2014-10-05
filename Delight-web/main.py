@@ -70,7 +70,7 @@ class ReceiptHandler(webapp2.RequestHandler):
 
         json_data = {
             "website": "delight-food.appspot.com",
-            "data": json.dumps(gql_json_parser(query_data)),
+            "data": gql_json_parser(query_data),
             "receipt_key": receipt_key,
             "business_name": business.name,
             "business_key": str(business.key())
@@ -249,9 +249,10 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         a_business = Business(name=BUSINESS_NAME).put()
 
-        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=10.0, business_key=str(a_business), kind_of_food='Rice').put()
+        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=10.25, business_key=str(a_business), kind_of_food='Rice').put()
         test_food_item_2 = FoodItem(name='Pad Thai', cost=9.75, business_key=str(a_business), kind_of_food='Noodles').put()
         test_food_item_3 = FoodItem(name='Pad See ew', cost=8.75, business_key=str(a_business), kind_of_food='Noodles').put()
+        test_food_item_4 = FoodItem(name='Basil Fried Rice', cost=6.75, business_key=str(a_business), kind_of_food='Rice').put()
 
         a_receipt = Receipt(name='test_receipt').put()
 
@@ -267,7 +268,7 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
             },
             {
                 'comment': 'nice',
-                'target': str(test_food_item),
+                'target': str(test_food_item_4),
                 'kind': 'food'
             },
             {

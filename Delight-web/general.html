@@ -30,7 +30,47 @@
           options: {'title': ''},
           containerId: 'daily_rating'
         });
+
         wrapper.draw();
+        google.visualization.events.addListener(wrapper, 'ready', onReady);
+        function onReady() {
+          google.visualization.events.addListener(wrapper, 'select', selectHandler);
+        }
+        var oTable = $('#datatable').dataTable();
+        function selectHandler() {
+          var selectedItem = wrapper.getChart().getSelection()[0];
+          if (selectedItem) {
+            oTable.fnFilter(selectedItem.column);
+            // debugger
+            // var value = wrapper.getDataTable().getValue(0, selectedItem.column);
+            // console.log(value);
+          }
+        }
       }
     </script>
+
+<h1>Comments</h1>
+<table class="table table-striped" id="datatable">
+  <thead>
+    <tr>
+      <th>Stars</th>
+      <th>Comment</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for review in reviews %}
+      <tr>
+        <td>{{review.stars}}</td>
+        <td>{{review.comment}}</td>
+        <td>{{review.created_at}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
 {% endblock %}
