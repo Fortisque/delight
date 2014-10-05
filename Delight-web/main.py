@@ -77,7 +77,7 @@ class ReceiptHandler(webapp2.RequestHandler):
         }
 
         template_values['food_items'] = query_data
-        template_values['json_query_data'] = json_data
+        template_values['json_query_data'] = json.dumps(json_data)
         template_values['QR_url'] = "http://api.qrserver.com/v1/create-qr-code/?data=%s&size=250x250" % (template_values["json_query_data"],)
         template = jinja_environment.get_template("receipt.html")
         self.response.out.write(template.render(template_values))
