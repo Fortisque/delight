@@ -27,7 +27,7 @@ from math import floor
 
 from models import *
 
-BUSINESS_NAME = 'Gecko Gecko'
+BUSINESS_NAME = 'Eureka'
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
@@ -318,7 +318,7 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
         self.response.write("success")
 
 class BatchReviewHandler(webapp2.RequestHandler):
-    def get(self):
+    def post(self):
         data = self.request.get('data')
         receipt_key = self.request.get('receipt_key')
         business_key = self.request.get('business_key')
