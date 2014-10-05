@@ -16,7 +16,7 @@ class User(db.Model):
     password = db.StringProperty(required=True)
 
 class Review(db.Model):
-    stars = db.IntegerProperty(required=True)
+    stars = db.FloatProperty(required=True)
     comment = db.TextProperty()
     kind_of_review = db.StringProperty(required=True)
     created_at = db.DateTimeProperty(required=True)

@@ -301,7 +301,7 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
             i = 0
             value = random.random() * 10 + 10
             while(i < value):
-                review['stars'] = int(floor(random.random()*5 + 1))
+                review['stars'] = floor(random.random()*5 + 1)
                 i += 1
                 Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=str(a_business)).put()
 
