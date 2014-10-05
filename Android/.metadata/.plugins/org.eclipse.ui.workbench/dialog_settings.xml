@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+<<<<<<< HEAD
+=======
 	<section name="org.eclipse.ui.internal.QuickAccess">
 		<item value="563" key="dialogHeight"/>
 		<item value="900" key="dialogWidth"/>
@@ -18,4 +20,5 @@
 			<item value="com.android.ide.eclipse.wizards.category"/>
 		</list>
 	</section>
+>>>>>>> 31b6dacd4cba3dd3799b664e8e069a26b536142d
 </section>

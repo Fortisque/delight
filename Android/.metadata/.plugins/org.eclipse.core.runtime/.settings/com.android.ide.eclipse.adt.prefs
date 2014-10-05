@@ -1,3 +1,7 @@
 com.android.ide.eclipse.adt.fixLegacyEditors=1
+<<<<<<< HEAD
+com.android.ide.eclipse.adt.sdk=/Users/zuoaling/Downloads/adt-bundle-mac/sdk
+=======
 com.android.ide.eclipse.adt.sdk=/Users/kevincasey/dev/adt-bundle-mac-x86_64-20140702/sdk
+>>>>>>> 31b6dacd4cba3dd3799b664e8e069a26b536142d
 eclipse.preferences.version=1

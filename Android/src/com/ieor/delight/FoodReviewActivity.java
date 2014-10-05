@@ -2,6 +2,7 @@ package com.ieor.delight;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 public class FoodReviewActivity extends ListActivity implements OnClickListener {
 	
 	Button nextButton;
+	ArrayList<FoodReviewCell> foods;
 	ArrayList<Row> reviews;
 	FoodReviewAdapter adapter;
 
@@ -20,6 +22,7 @@ public class FoodReviewActivity extends ListActivity implements OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_reviews);
+        foods = getIntent().getParcelableArrayListExtra("foods");
         populateReviews();
         adapter = new FoodReviewAdapter(this, R.layout.food_rating_cell, reviews);
 		adapter.notifyDataSetChanged();
@@ -35,19 +38,18 @@ public class FoodReviewActivity extends ListActivity implements OnClickListener 
 		super.onListItemClick(l, v, position, id);
 		System.out.println("onListItemClick " + position);
 		if (position == reviews.size() - 1) {
-			Intent intent = new Intent(this, RestaurantHomeActivity.class);
-			startActivity(intent);
 			saveReviews();
+			Intent resultIntent = new Intent();
+			resultIntent.putParcelableArrayListExtra("foods", foods);
+			setResult(Activity.RESULT_OK, resultIntent);
 			finish();
 		}
 	}
 	
 	public void populateReviews(){
-		//make get request
-		//mock data for now
+		//use data from qr code
 		reviews = new ArrayList<Row>();
-		for(int i = 1; i <= 12; i++){
-			FoodReviewCell food  = new FoodReviewCell(i+ "", "Food " + i, "image" + i);
+		for(FoodReviewCell food : foods){
 			Row row = new Row(Row.REVIEW, food);
 			reviews.add(row);
 		}
@@ -56,5 +58,8 @@ public class FoodReviewActivity extends ListActivity implements OnClickListener 
 	
 	public void saveReviews(){
 		//save reviews for post request
+		for(int i = 0; i < reviews.size() - 1; i++){
+			foods.set(i, reviews.get(i).review);
+		}
 	}
 }
