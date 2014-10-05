@@ -58,9 +58,9 @@ public class MainActivity extends Activity implements OnClickListener {
 				JSONArray restaurantData = response.getJSONArray("data");
 				restaurantData.toString();
 				Intent intent = new Intent(this, RestaurantHomeActivity.class);
-				intent.putExtra("busineesKey", businessKey);
+				intent.putExtra("businessKey", businessKey);
 				intent.putExtra("businessName", businessName);
-				intent.putExtra("recieptKey", receiptKey);
+				intent.putExtra("receiptKey", receiptKey);
 				intent.putExtra("data", restaurantData.toString());
 				startActivity(intent);
 			} catch (JSONException e) {
