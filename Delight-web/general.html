@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
-    
+
     <h1> Dashboard </h1>
     <a href="/review/"> General </a>
     <a href="/review/food"> Food </a>
@@ -10,7 +10,8 @@
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
 	<h2> general </h2>
-    <div id="vis_div"></div>
+    
+    <div id="daily_rating"></div>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load('visualization', '1');   // Don't need to specify chart libraries!
@@ -22,7 +23,7 @@
           dataTable: [['', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
                       ['', 700, 300, 400, 500, 600]],
           options: {'title': ''},
-          containerId: 'vis_div'
+          containerId: 'daily_rating'
         });
         wrapper.draw();
       }
