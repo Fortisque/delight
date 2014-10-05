@@ -67,16 +67,16 @@ class ReceiptHandler(webapp2.RequestHandler):
         query_data = FoodItem.get(food_item_keys)
 
         json_data = {
-            'website': 'delight-food.appspot.com',
-            'data': json.dumps(gql_json_parser(query_data)),
-            'receipt_key': receipt_key,
-            'business_name': business.name,
-            'business_key': str(business.key())
+            "website": "delight-food.appspot.com",
+            "data": json.dumps(gql_json_parser(query_data)),
+            "receipt_key": receipt_key,
+            "business_name": business.name,
+            "business_key": str(business.key())
         }
 
         template_values['food_items'] = query_data
         template_values['json_query_data'] = json_data
-        template_values['QR_url'] = 'http://api.qrserver.com/v1/create-qr-code/?data=%s&size=100x100' % (template_values['json_query_data'],)
+        template_values['QR_url'] = "http://api.qrserver.com/v1/create-qr-code/?data=%s&size=250x250" % (template_values["json_query_data"],)
         template = jinja_environment.get_template("receipt.html")
         self.response.out.write(template.render(template_values))
 
@@ -100,7 +100,7 @@ class ReviewGeneralHandler(webapp2.RequestHandler):
 
 
         template_values['reviews'] = reviews
-        template_values['star_count'] = json.dumps(star_count)
+        template_values['star_count'] = star_count
         template = jinja_environment.get_template("general.html")
         self.response.out.write(template.render(template_values))
 
@@ -177,13 +177,21 @@ class ReviewServerHandler(webapp2.RequestHandler):
 
         business = Business.all().filter('name =', BUSINESS_NAME).get()
 
-        food_items = {}
-        for food_item in FoodItem.gql("WHERE business_key = :1", str(business.key())):
-            reviews = Review.gql("WHERE target = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(food_item.key()), 'food', lower_limit, upper_limit)
+        servers = {}
+        reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(business.key()), 'service', lower_limit, upper_limit)
+        for review in reviews:
+            server_name = review.target
+            if server_name in servers:
+                servers[server_name].append(review)
+            else:
+                servers[server_name] = [review]
+
+        servers_data = {}
+        for server_name in servers:
             star_count = defaultdict(int)
             summation = 0
             count = 0
-            for review in reviews:
+            for review in servers[server_name]:
                 star_count[review.stars] += 1
                 count += 1
                 summation += review.stars
@@ -191,15 +199,13 @@ class ReviewServerHandler(webapp2.RequestHandler):
             if count == 0:
                 count = 1
             average = summation * 1.0 / count
-            food_items[food_item.name] = {
+            servers_data[server_name] = {
                 "average": average,
                 "total": count,
-                "key": str(food_item.key()),
                 "star_count": star_count
             }
 
-        template_values['food_items'] = json.dumps(food_items)
-
+        template_values['servers_data'] = json.dumps(servers_data)
         template = jinja_environment.get_template("server.html")
         self.response.out.write(template.render(template_values))
 
@@ -282,12 +288,12 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
             },
             {
                 'comment': 'hi bob',
-                'target': '',
+                'target': 'Jennifer',
                 'kind': 'service'
             },
             {
                 'comment': 'hi jim',
-                'target': '',
+                'target': 'Kevin',
                 'kind': 'service'
             }
         ]

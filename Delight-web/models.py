@@ -28,4 +28,10 @@ class FoodItem(db.Model):
     name = db.StringProperty(required=True)
     cost = db.FloatProperty(required=True)
     picture = db.StringProperty()
-    business_key = db.StringProperty()
+    business_key = db.StringProperty(required=True)
+
+class Server(db.Model):
+    name = db.StringProperty(required=True)
+    salary = db.FloatProperty()
+    picture = db.StringProperty()
+    business_key = db.StringProperty(required=True)
