@@ -27,6 +27,7 @@ class Review(db.Model):
 class FoodItem(db.Model):
     name = db.StringProperty(required=True)
     cost = db.FloatProperty(required=True)
+    kind_of_food = db.StringProperty(required=True)
     picture = db.StringProperty()
     business_key = db.StringProperty(required=True)
 

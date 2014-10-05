@@ -1,15 +1,20 @@
 {% extends "base.html" %}
 {% block body %}
 
-    <h1> Dashboard </h1>
-    <p><a href="/review/"> General </a></p>
-    <p><a href="/review/food"> Food </a></p>
-    <p><a href="/review/server"> Server </a></p>
+    <h1> Dashboard</h1>
+
+    <div class="sub-nav">
+        <ul>
+            <li><a href="/review/"> General </a></li>
+            <li><a href="/review/food"> Food </a></li>
+            <li><a href="/review/server"> Server </a></li>
+        <ul>
+    </div>
 
     
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
-	<h2> general </h2>
+	<h2> General Analysis </h2>
     
     <div id="daily_rating"></div>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -25,14 +30,44 @@
           options: {'title': ''},
           containerId: 'daily_rating'
         });
+
         wrapper.draw();
+        google.visualization.events.addListener(wrapper, 'ready', onReady);
+        function onReady() {
+          google.visualization.events.addListener(wrapper, 'select', selectHandler);
+        }
+        var oTable = $('#datatable').dataTable();
+        function selectHandler() {
+          var selectedItem = wrapper.getChart().getSelection()[0];
+          if (selectedItem) {
+            oTable.fnFilter(selectedItem.column, 0);
+          }
+        }
       }
     </script>
 
-    <
-
+<h1>Comments</h1>
+<table class="table table-striped" id="datatable">
+  <thead>
+    <tr>
+      <th>Stars</th>
+      <th>Comment</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
     {% for review in reviews %}
-        <div>{{review.comment}}</div>
+      <tr>
+        <td>{{review.stars}}</td>
+        <td>{{review.comment}}</td>
+        <td>{{review.created_at}}</td>
+      </tr>
     {% endfor %}
+  </tbody>
+</table>
 
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
 {% endblock %}

@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 {% block body %}
 	<h1> Dashboard </h1>
-	<p><a href="/review/"> General </a></p>
-  <p><a href="/review/food"> Food </a></p>
-  <p><a href="/review/server"> Server </a></p>
+	
+	<div class="sub-nav">
+        <ul>
+            <li><a href="/review/"> General </a></li>
+            <li><a href="/review/food"> Food </a></li>
+            <li><a href="/review/server"> Server </a></li>
+        <ul>
+    </div>
 
 	<h2> Service Analysis </h2>
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -35,6 +40,15 @@
         };
 
         var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+
+        google.visualization.events.addListener(chart, 'select', selectHandler);
+        function selectHandler() {
+          var selectedItem = chart.getSelection()[0];
+          if (selectedItem) {
+            var value = data.getValue(selectedItem.row, 0); // 0 because no columns
+            window.location.href = window.location.href + '/individual?name=' + value;
+          }
+        }
 
         chart.draw(data, options);
 

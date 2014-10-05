@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="static/css/base.css">-->
     <style>
         body {
-            background: url(http://s3.amazonaws.com/siteninja/site-ninja1-com/1357772979/original/Eureka-Restuarant-Santa-Barbara_02.jpg?1357772952) fixed; 
+            /*background: url(http://s3.amazonaws.com/siteninja/site-ninja1-com/1357772979/original/Eureka-Restuarant-Santa-Barbara_02.jpg?1357772952) fixed; 
             background-size: cover;
-            background-repeat: no-repeat;
+            background-repeat: no-repeat;*/
             margin: 0px;
             padding: 0px;
         }
@@ -40,7 +40,7 @@
 
         .wrapper {
             background-color: rgba(255,255,255,0.7);
-            margin-left: 15%;
+            margin-left: 10%;
             margin-bottom: 5%;
             padding: 3%;
         }
@@ -54,7 +54,7 @@
         #nav {
             background-color: rgba(255, 160, 0, 0.9);
             text-align: center;
-            width: 15%;
+            width: 10%;
             height: 50%;
             float: left;
         }
@@ -73,8 +73,36 @@
 
         #nav a:hover {
             margin: 4%;
-            color: white;
+            background-color: white;
         }
+
+        .sub-nav {
+            width: 30%;
+            float: left;
+        }
+
+        .sub-nav ul {
+            list-style-type: none;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .sub-nav li {
+            display: inline;
+            margin-right: 3px;    
+        }
+
+        .sub-nav a {
+            color:black;
+            text-decoration: none;
+            background-color: orange;
+            padding: 2px;
+        }
+
+        .sub-nav a:hover {
+            background-color: white;
+        }
+
 
         h2 {
             color: black;
@@ -96,7 +124,7 @@
     <div id="nav">
         <ul>
           <li><h2>Welcome Eureka!</h2></li>
-          <li><a href="">Dashboard</a></li>
+          <li><a href="/">Dashboard</a></li>
           <li><a href="">Menu</a></li>
           <li><a href="">Servers</a></li>
           <li><a href="">Responses</a></li>
