@@ -1,18 +1,42 @@
-{% extends "base.html" %}
-{% block body %}
+<html>
+<head>
+  <title> Receipt </title>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <style>
+    span {
+      float: right;
+    }
+
+    body {
+      width: 20%;
+      border-style: solid;
+      border-width: 3px;
+      padding: 3%;
+    }
+
+    #qr_img {
+      position: relative;
+      top: 50px;
+    }
+
+  </style>
+</head>
+<body>
   <h1> Receipt </h1>
-  {% for food_item in food_items %}
-    <div>{{food_item.name}}</div>
-    <div>{{food_item.cost}}</div>
-  {% endfor %}
-  {{json_query_data}}
+  <h2> Eureka </h2>
+  <div id="wrapper">
+    {% for food_item in food_items %}
+      <div>{{food_item.name}} <span>${{food_item.cost}}</span></div>
+    {% endfor %}
 
-  <div><img id="qr_img" /></div>
+    <div><img id="qr_img" /></div>
 
-  <div style="display:none" id="qr_url">{{QR_url}}</div>
-  <script>
-    $( document ).ready(function() {
-      $('#qr_img').attr('src', $('#qr_url')[0].innerHTML)
-    });
-  </script>
-{% endblock %}
+    <div style="display:none" id="qr_url">{{QR_url}}</div>
+    <script>
+      $( document ).ready(function() {
+        $('#qr_img').attr('src', $('#qr_url')[0].innerHTML)
+      });
+    </script>
+  </div>
+</body>
+</html>
