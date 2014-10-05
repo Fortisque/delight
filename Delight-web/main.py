@@ -260,9 +260,9 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         a_business = Business(name=BUSINESS_NAME).put()
 
-        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=9.75, business_key=str(a_business), kind_of_food='Rice').put()
-        test_food_item_2 = FoodItem(name='Pad Thai', cost=7.75, business_key=str(a_business), kind_of_food='Noodles').put()
-        test_food_item_3 = FoodItem(name='Pad See ew', cost=5.75, business_key=str(a_business), kind_of_food='Noodles').put()
+        test_food_item = FoodItem(name='Fresno Fig Burger', cost=9.75, business_key=str(a_business), kind_of_food='Burger').put()
+        test_food_item_2 = FoodItem(name='Fried Chicken Sliders', cost=12.75, business_key=str(a_business), kind_of_food='Signature').put()
+        test_food_item_3 = FoodItem(name='Cowboy Burger', cost=7.75, business_key=str(a_business), kind_of_food='Burger').put()
 
         a_receipt = Receipt(name='test_receipt').put()
 
