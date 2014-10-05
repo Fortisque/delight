@@ -18,4 +18,11 @@
         android:text="Scan QR Code"
         android:textColor="@color/white" />
 
+    <Button
+        android:id="@+id/buttonHidden"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
 </RelativeLayout>

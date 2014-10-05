@@ -114,6 +114,7 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 												System.out.println("cofirm comment: "+ userInput.getText());
 												commentButton.setVisibility(View.GONE);
 												commentbox.setVisibility(View.VISIBLE);
+												comment.setVisibility(View.VISIBLE);
 												comment.setText(userInput.getText());
 												review.setComment(userInput.getText().toString());
 											}
@@ -135,6 +136,7 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 
 			if (review.getComment() != null) {
 				commentButton.setVisibility(View.GONE);
+				commentbox.setVisibility(View.VISIBLE);
 				comment.setVisibility(View.VISIBLE);
 				comment.setText(review.getComment());
 			}
