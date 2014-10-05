@@ -14,8 +14,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ActionBar.LayoutParams;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -25,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class RestaurantHomeActivity extends Activity implements OnClickListener {
@@ -108,6 +114,32 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 		} else if (v.getId() == R.id.buttonServiceReview) {
 			Intent intent = new Intent(this, ServiceReviewActivity.class);
 			startActivityForResult(intent, SERVICE_REVIEW_CODE);
+		} else if(v.getId() == R.id.buttonDone){
+			LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View promptsView = li.inflate(R.layout.finish_dialog, null);
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			alertDialogBuilder.setView(promptsView);
+			alertDialogBuilder
+					.setCancelable(false)
+					.setPositiveButton("AWESOME!",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int id) {
+									finish();
+								}
+							});
+
+			// create alert dialog
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
+			Button b = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+			if(b != null){
+				Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/Oswald_Regular.otf");
+				b.setBackgroundColor(getResources().getColor(R.color.turquoise));
+				b.setTypeface(tf);
+				b.setTextColor(Color.WHITE);
+			}
+				
 		}
 	}
 
