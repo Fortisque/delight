@@ -40,7 +40,9 @@
         android:layout_marginTop="5dp"
         android:layout_weight="2"
         android:text="General"
-        style="@style/menuButton" />
+        style="@style/menuButton"
+        android:textColor="@drawable/menu_button_color"
+        android:background="@drawable/menu_button" />
 
     <Button
         android:id="@+id/buttonFoodReview"
@@ -50,6 +52,7 @@
         android:layout_weight="2"
         android:text="Food"
         style="@style/menuButton"
+        android:textColor="@drawable/menu_button_color"
         android:background="@drawable/menu_button" />
 
     <Button
@@ -60,6 +63,7 @@
         android:layout_weight="2"
         android:text="Service"
         style="@style/menuButton"
+        android:textColor="@drawable/menu_button_color"
         android:background="@drawable/menu_button" />
 
 </LinearLayout>
