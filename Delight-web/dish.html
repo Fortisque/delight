@@ -26,6 +26,15 @@
           containerId: 'vis_div'
         });
         wrapper.draw();
+
+        var oTable = $('#datatable').dataTable();
+        google.visualization.events.addListener(wrapper, 'select', selectHandler);
+        function selectHandler() {
+          var selectedItem = wrapper.getChart().getSelection()[0];
+          if (selectedItem) {
+            oTable.fnFilter(selectedItem.column, 0);
+          }
+        }
       }
     </script>
 
@@ -53,10 +62,5 @@
 <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
-<script>
-  $(document).ready(function() {
-      $('#datatable').dataTable();
-  } );
-</script>
     
 {% endblock %}

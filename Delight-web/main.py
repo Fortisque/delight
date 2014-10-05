@@ -213,18 +213,6 @@ class ReviewServerHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template("server.html")
         self.response.out.write(template.render(template_values))
 
-class AnalyzeHandler(webapp2.RequestHandler):
-    def get(self):
-        business = Business.all().filter('name =', BUSINESS_NAME).get()
-        template_values = {}
-        template_values['food_items'] = FoodItem.gql("WHERE business_key = :1", str(business.key()))
-        template = jinja_environment.get_template("analyze.html")
-        self.response.out.write(template.render(template_values))
-
-class FoodHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.write("hello")
-
 class ResetAndSeedHandler(webapp2.RequestHandler):
     def get(self):
         query = Business.all(keys_only=True)
@@ -249,10 +237,10 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         a_business = Business(name=BUSINESS_NAME).put()
 
-        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=10.25, business_key=str(a_business), kind_of_food='Rice').put()
+        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=15.25, business_key=str(a_business), kind_of_food='Rice').put()
         test_food_item_2 = FoodItem(name='Pad Thai', cost=9.75, business_key=str(a_business), kind_of_food='Noodles').put()
         test_food_item_3 = FoodItem(name='Pad See ew', cost=8.75, business_key=str(a_business), kind_of_food='Noodles').put()
-        test_food_item_4 = FoodItem(name='Basil Fried Rice', cost=6.75, business_key=str(a_business), kind_of_food='Rice').put()
+        test_food_item_4 = FoodItem(name='Basil Fried Rice', cost=5.75, business_key=str(a_business), kind_of_food='Rice').put()
 
         a_receipt = Receipt(name='test_receipt').put()
 
