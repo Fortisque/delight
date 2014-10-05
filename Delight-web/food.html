@@ -31,14 +31,18 @@
 	        hAxis: {
             title: 'Average Rating',
             viewWindow: {
-              min: 1,
-              max: 5
+              min: 0,
+              max: 6
             },
             ticks: [1, 2, 3, 4, 5]
           },
 	        vAxis: {
 	        	title: 'Price',
-	        	viewWindowMode: 'pretty'
+	        	viewWindow: {
+	        		min: 0,
+	        		max: 30
+	        	},
+	        	ticks: [0,5,10,15,20,25,30]
 	        }
 	      };
 
