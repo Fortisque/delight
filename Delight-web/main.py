@@ -165,6 +165,7 @@ class ReviewDishHandler(webapp2.RequestHandler):
         for review in reviews:
             star_count[floor(review.stars)] += 1
 
+        template_values['picture'] = food_item.picture            
         template_values['reviews'] = reviews
         template_values['star_count'] = star_count
         template = jinja_environment.get_template("dish.html")
@@ -260,9 +261,9 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         a_business = Business(name=BUSINESS_NAME).put()
 
-        test_food_item = FoodItem(name='Fresno Fig Burger', cost=9.75, business_key=str(a_business), kind_of_food='Burger').put()
-        test_food_item_2 = FoodItem(name='Fried Chicken Sliders', cost=12.75, business_key=str(a_business), kind_of_food='Signature').put()
-        test_food_item_3 = FoodItem(name='Cowboy Burger', cost=7.75, business_key=str(a_business), kind_of_food='Burger').put()
+        test_food_item = FoodItem(name='Fresno Fig Burger', cost=9.75, business_key=str(a_business), kind_of_food='Burger', picture='http://a3.urbancdn.com/w/s/7Z/DlSMbQUJWorvru-640m.jpg').put()
+        test_food_item_2 = FoodItem(name='Fried Chicken Sliders', cost=12.75, business_key=str(a_business), kind_of_food='Signature', picture='http://www.foodrepublic.com/sites/default/files/imagecache/enlarge/recipe/sipsnbites_chickenslider.jpg').put()
+        test_food_item_3 = FoodItem(name='Cowboy Burger', cost=7.75, business_key=str(a_business), kind_of_food='Burger', picture='http://www.applebees.com/~/media/ABs0625/Website_Images_4_ms/MenuC_579x441/Cowboy_Burger.jpg').put()
 
         a_receipt = Receipt(name='test_receipt').put()
 
@@ -272,27 +273,12 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
         receipt_key = str(a_receipt)
         data = [
             {
-                'comment': 'great',
-                'target': str(test_food_item),
-                'kind': 'food'
-            },
-            {
-                'comment': 'terrible',
-                'target': str(test_food_item_2),
-                'kind': 'food'
-            },
-            {
-                'comment': 'edible',
-                'target': str(test_food_item_3),
-                'kind': 'food'
-            },
-            {
-                'comment': 'nice place',
+                'comment': 'meh',
                 'target': '',
                 'kind': 'general'
             },
             {
-                'comment': 'love it',
+                'comment': 'sample data',
                 'target': '',
                 'kind': 'general'
             },
@@ -315,20 +301,50 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
                 i += 1
                 Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=str(a_business)).put()
 
+        data = [
+            {
+                'comment': 'great',
+                'stars': 4.0,
+                'target': str(test_food_item),
+                'kind': 'food'
+            },
+            {
+                'comment': 'terrible',
+                'stars': 2.0,
+                'target': str(test_food_item_2),
+                'kind': 'food'
+            },
+            {
+                'comment': 'edible',
+                'stars': 3.0,
+                'target': str(test_food_item_3),
+                'kind': 'food'
+            },
+        ]
+
+        for review in data:
+            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=str(a_business)).put()
+
         self.response.write("success")
 
 class BatchReviewHandler(webapp2.RequestHandler):
     def post(self):
-        data = self.request.get('data')
-        receipt_key = self.request.get('receipt_key')
-        business_key = self.request.get('business_key')
+        all_data = json.loads(self.request.body)
+        data = json.loads(all_data['data'])
+        receipt_key = all_data['receipt_key']
+        business_key = all_data['business_key']
         receipt = Receipt.get(receipt_key)
 
         for review in data:
-            Review(stars=review['stars'], comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
+            if 'comment' not in review:
+                review['comment'] = ''
+            Review(stars=float(review['stars']), comment=review['comment'], created_at=datetime.now(), target=review['target'], receipt_key=receipt_key, kind_of_review=review['kind'], business_key=business_key).put()
 
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.write("success")
+        obj = {
+            'success': 'yes', 
+        } 
+        self.response.write(json.dumps(obj))
 
 app = webapp2.WSGIApplication([
     ('/', ReviewGeneralHandler),

@@ -54,21 +54,21 @@ public class ServiceReviewActivity extends Activity implements OnItemClickListen
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		case (REVIEW_CODE): {
-			if (resultCode == Activity.RESULT_OK) {
-		        WaiterCell waiter = data.getParcelableExtra("ReviewedWaiter");
-		        int position = data.getIntExtra("position", -1);
-		        if(position != -1){
-		        	waiters.set(position, waiter);
-		        }
-				System.out.println(waiter.toString());
-				boolean cont = data.getBooleanExtra("continue", true);
-				if(!cont){
-					finish();
+			case (REVIEW_CODE): {
+				if (resultCode == Activity.RESULT_OK) {
+			        WaiterCell waiter = data.getParcelableExtra("ReviewedWaiter");
+			        int position = data.getIntExtra("position", -1);
+			        if(position != -1){
+			        	waiters.set(position, waiter);
+			        }
+					System.out.println(waiter.toString());
+					boolean cont = data.getBooleanExtra("continue", true);
+					if(!cont){
+						finish();
+					}
 				}
+				break;
 			}
-			break;
-		}
 		}
 	}
 

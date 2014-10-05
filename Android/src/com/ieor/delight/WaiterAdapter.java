@@ -32,7 +32,7 @@ public class WaiterAdapter extends BaseAdapter {
 		textView.setText(waiters.get(position).getName());
 		ImageView imageView = (ImageView) gridView.findViewById(R.id.imageViewWaiter);
 		String imagePath = waiters.get(position).getImage(); //used later with image url
-		imageView.setImageResource(R.drawable.headshot);
+		imageView.setImageResource(R.drawable.headshot2);
 		return gridView;
 	}
  
