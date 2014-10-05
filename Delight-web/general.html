@@ -27,7 +27,7 @@
           chartType: 'ColumnChart',
           dataTable: [['', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
                       ['', {{star_count[1]}}, {{star_count[2]}}, {{star_count[3]}}, {{star_count[4]}}, {{star_count[5]}}]],
-          options: {'title': ''},
+          options: {'title': '', 'vAxis': { 'title': 'Total Reviews' }},
           containerId: 'daily_rating'
         });
 

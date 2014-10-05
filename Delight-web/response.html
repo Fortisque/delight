@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body %}
+  <h1> Reply to Comment </h1>
+  <h3> Message: {{comment}} </h3>
+
+  <form>
+    Response: <input type="text" name="response">
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}
