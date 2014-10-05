@@ -1,15 +1,20 @@
 {% extends "base.html" %}
 {% block body %}
 
-    <h1> Dashboard </h1>
-    <p><a href="/review/"> General </a></p>
-    <p><a href="/review/food"> Food </a></p>
-    <p><a href="/review/server"> Server </a></p>
+    <h1> Dashboard</h1>
+
+    <div class="sub-nav">
+        <ul>
+            <li><a href="/review/"> General </a></li>
+            <li><a href="/review/food"> Food </a></li>
+            <li><a href="/review/server"> Server </a></li>
+        <ul>
+    </div>
 
     
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
-	<h2> general </h2>
+	<h2> General Analysis </h2>
     
     <div id="daily_rating"></div>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -28,10 +33,4 @@
         wrapper.draw();
       }
     </script>
-
-
-    {% for review in reviews %}
-        <div>{{review.comment}}</div>
-    {% endfor %}
-
 {% endblock %}
