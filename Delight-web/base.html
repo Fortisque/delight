@@ -5,12 +5,99 @@
     <title>Delight</title>
     <!--<link rel="stylesheet" href="static/css/bootstrap.css">
     <link rel="stylesheet" href="static/css/base.css">-->
+    <style>
+        body {
+            background: url(http://s3.amazonaws.com/siteninja/site-ninja1-com/1357772979/original/Eureka-Restuarant-Santa-Barbara_02.jpg?1357772952) fixed; 
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #header, #nav {
+            color: white;
+        }
+
+        #logo {
+            font-size: 80px;
+        }
+
+        .wrapper {
+            background-color: rgba(255,255,255,0.7);
+            margin-left: 15%;
+            margin-bottom: 5%;
+            padding: 3%;
+        }
+
+        #header-right {
+            text-align: right;
+            position: relative;
+            top: -100px;
+        }
+
+        #nav {
+            background-color: rgba(255, 160, 0, 0.9);
+            text-align: center;
+            width: 15%;
+            height: 50%;
+            float: left;
+        }
+
+        #nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 10px;
+        }
+
+        #nav a {
+            margin: 4%;
+            color:black;
+            text-decoration: none;
+        }
+
+        #nav a:hover {
+            margin: 4%;
+            color: white;
+        }
+
+        h2 {
+            color: black;
+        }
+
+        span {
+            float: bottom;
+        }
+                
+    </style>
 </head>
 <body>
-    <h1> Delight </h1>
-    <h2> Gecko Gecko </h2>
+    <div id="header">
+        <h1 id="logo"> Delight </h1>
+        <div id="header-right">
+        </div>
+    </div>
+
+    <div id="nav">
+        <ul>
+          <li><h2>Welcome Eureka!</h2></li>
+          <li><a href="">Dashboard</a></li>
+          <li><a href="">Menu</a></li>
+          <li><a href="">Servers</a></li>
+          <li><a href="">Responses</a></li>
+          <li><a href="">Customers</a></li>
+          <li><a href=""><h3>Logout<h3></a></li>
+        </ul>
+    </div>
+    
+    <div class="wrapper">
     {% block body %}
     {% endblock %}
+    </div>
 <script>
 </script>
 </body>

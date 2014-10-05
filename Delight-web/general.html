@@ -1,16 +1,12 @@
 {% extends "base.html" %}
 {% block body %}
+    
     <h1> Dashboard </h1>
     <a href="/review/"> General </a>
     <a href="/review/food"> Food </a>
     <a href="/review/server"> Server </a>
 
-    {% for review in reviews %}
-        <div>{{review.comment}}</div>
-    {% endfor %}
-
-    {{star_count}}
-
+    
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
 	<h2> general </h2>
@@ -32,64 +28,10 @@
       }
     </script>
 
-    <!--<script>
-        var colors = {"1": "red",
-                  "2": "orange",
-                  "3": "yellow",
-                  "4": "green",
-                  "5": "blue"}
+    {% for review in reviews %}
+        <div>{{review.comment}}</div>
+    {% endfor %}
 
+    {{star_count}}
 
-        var number = [100, 200, 400, 200, 100];
-        var sum = 0
-        for (var i = 0; i < number.length; i++) {
-            sum += number[i];
-        }
- 
-        var svgContainer = d3.select("body").append("svg")
-                                .attr("width", 200)
-                                .attr("height", 100)
-                                .style("border", "1px solid black");
-
-        var percentageRectange = svgContainer.selectAll("rect")
-                            .data(number)
-                            .enter()
-                            .append("rect");
-
-        var percentageRectangeAttributes = percentageRectange
-                                .attr("x", function(d, i) {
-                                    return i * 40;
-                                })
-                                .attr("y", function(d, i) {
-                                    return 100 - d/sum * 100;
-                                })
-                                .attr("width", 40)
-                                .attr("height", function(d) {return d;})
-                                .style("fill", function(d, i) {
-                                    return colors[(5 - i).toString()];
-                                });
-
-        svgContainer.selectAll("text")
-               .data(number)
-               .enter()
-               .append("text")
-               .text(function(d) {
-                    return d;
-               })
-               .attr("text-anchor", "middle")
-               .attr("x", function(d, i) {
-                    return i * 40 + 20;
-               })
-               .attr("y", function(d) {
-                    return 100 - d/sum * 100;
-               })
-               .attr("font-family", "sans-serif")
-               .attr("font-size", "11px")
-               .attr("fill", "black");
-
-
-    </script>-->
-
-    
-    
 {% endblock %}
