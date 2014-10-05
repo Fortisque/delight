@@ -8,11 +8,11 @@ public class FoodReviewCell implements Parcelable {
 	
 	private String key;
 	private String name;
-	private String imageUrl;
+	private int imageUrl;
 	private float rating;
 	private String comment;
 	
-	public FoodReviewCell(String key, String name, String imageUrl){
+	public FoodReviewCell(String key, String name, int imageUrl){
 		this.key = key;
 		this.name = name;
 		this.imageUrl = imageUrl;
@@ -21,7 +21,7 @@ public class FoodReviewCell implements Parcelable {
 	public FoodReviewCell(Parcel in) {
 		this.key = in.readString();
 		this.name = in.readString();
-		this.imageUrl = in.readString();
+		this.imageUrl = in.readInt();
 		this.comment = in.readString();
 		this.rating = in.readFloat();
 	} 
@@ -34,7 +34,7 @@ public class FoodReviewCell implements Parcelable {
 		return name;
 	}
 	
-	public String getImageUrl(){
+	public int getImage(){
 		return imageUrl;
 	}
 	
@@ -74,7 +74,7 @@ public class FoodReviewCell implements Parcelable {
 	public void writeToParcel(Parcel parcel, int flags) {
 		parcel.writeString(key);
 		parcel.writeString(name);
-		parcel.writeString(imageUrl);
+		parcel.writeInt(imageUrl);
 		parcel.writeString(comment);
 		parcel.writeFloat(rating);
 	}
@@ -85,7 +85,7 @@ public class FoodReviewCell implements Parcelable {
         sb.append("***** Food Details *****\n");
         sb.append("Key="+getKey()+"\n");
         sb.append("Name="+getName()+"\n");
-        sb.append("Image="+getImageUrl()+"\n");
+        sb.append("Image="+getImage()+"\n");
         sb.append("Comment="+getComment()+"\n");
         sb.append("Rating="+getRating()+"\n");
         sb.append("*****************************\n");

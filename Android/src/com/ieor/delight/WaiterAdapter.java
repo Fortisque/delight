@@ -31,8 +31,8 @@ public class WaiterAdapter extends BaseAdapter {
 		TextView textView = (TextView) gridView.findViewById(R.id.textViewWaiterName);
 		textView.setText(waiters.get(position).getName());
 		ImageView imageView = (ImageView) gridView.findViewById(R.id.imageViewWaiter);
-		String imagePath = waiters.get(position).getImage(); //used later with image url
-		imageView.setImageResource(R.drawable.headshot2);
+		int imagePath = waiters.get(position).getImage(); //used later with image url
+		imageView.setImageResource(imagePath);
 		return gridView;
 	}
  

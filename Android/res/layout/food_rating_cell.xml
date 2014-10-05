@@ -11,7 +11,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:contentDescription="food image"
-        android:src="@drawable/ic_launcher" />
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/textViewFoodName"
@@ -19,32 +19,50 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/imageViewFood"
         android:layout_centerHorizontal="true"
-        android:text="Food Name" />
+        android:text="Food Name"
+        android:visibility="gone" />
 
-    <RatingBar
-        android:id="@+id/ratingBarFood"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewFoodName"
-        android:layout_centerHorizontal="true" />
+        android:background="@color/black"
+        android:orientation="vertical"
+        android:paddingBottom="8dp" >
 
-    <Button
-        android:id="@+id/buttonComment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ratingBarFood"
-        android:layout_centerHorizontal="true"
-        android:text="Comment" />
+        <RatingBar
+            android:id="@+id/ratingBarFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textViewFoodName"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center" />
 
-    <TextView
-        android:id="@+id/textViewComment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/ratingBarFood"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="Comment"
-        android:visibility="gone" />
+        <Button
+            android:id="@+id/buttonComment"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Comment"
+            android:textColor="@color/white" />
+
+        <LinearLayout
+            android:id="@+id/commentBox"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/layout_bg"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/textViewComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Comment" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

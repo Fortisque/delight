@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -12,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -62,9 +65,11 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 			LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = vi.inflate(R.layout.button_text_view, parent, false);
 			TextView view = (TextView) v.findViewById(R.id.textViewSimple);
-			view.setText("Finish");
+			Typeface tf = Typeface.createFromAsset(getContext().getAssets(),"fonts/Oswald_Regular.otf");
+			view.setTypeface(tf);
+			view.setText("DONE!");
 			view.setGravity(Gravity.CENTER);
-			return view;
+			return v;
 		}
 		
 		Row row = getItem(position);
@@ -77,6 +82,7 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 		RatingBar rating = (RatingBar) v.findViewById(R.id.ratingBarFood);
 		final TextView comment = (TextView) v.findViewById(R.id.textViewComment);
 		final Button commentButton = (Button) v.findViewById(R.id.buttonComment);
+		final LinearLayout commentbox = (LinearLayout) v.findViewById(R.id.commentBox);
 		
 		rating.setOnRatingBarChangeListener(null);
 		commentButton.setOnClickListener(null);
@@ -84,6 +90,9 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 		final FoodReviewCell review = reviews.get(position).review;
 		if (review != null) {
 			name.setText(review.getName());
+			image.setBackgroundResource(review.getImage());
+			Typeface tf = Typeface.createFromAsset(getContext().getAssets(),"fonts/Oswald_Regular.otf");
+			commentButton.setTypeface(tf);
 			commentButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -104,6 +113,7 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 											if(input.length() != 0){
 												System.out.println("cofirm comment: "+ userInput.getText());
 												commentButton.setVisibility(View.GONE);
+												commentbox.setVisibility(View.VISIBLE);
 												comment.setVisibility(View.VISIBLE);
 												comment.setText(userInput.getText());
 												review.setComment(userInput.getText().toString());
@@ -119,14 +129,14 @@ public class FoodReviewAdapter extends ArrayAdapter<Row> {
 	 
 					// create alert dialog
 					AlertDialog alertDialog = alertDialogBuilder.create();
-	 
-					// show it
+					alertDialog.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 					alertDialog.show();
 				}
 			});
 
 			if (review.getComment() != null) {
 				commentButton.setVisibility(View.GONE);
+				commentbox.setVisibility(View.VISIBLE);
 				comment.setVisibility(View.VISIBLE);
 				comment.setText(review.getComment());
 			}
