@@ -36,7 +36,7 @@ public class WaiterReviewActivity extends Activity implements OnClickListener {
         waiterName = (TextView)findViewById(R.id.textViewWaiterName);
         waiterName.setText(waiter.getName());
         waiterImage = (ImageView)findViewById(R.id.imageViewWaiter);
-        waiterImage.setImageResource(R.drawable.headshot);
+        waiterImage.setImageResource(waiter.getImage());
         rating = (RatingBar)findViewById(R.id.ratingBarWaiter);
         if(waiter.getRating() != 0){
         	rating.setRating(waiter.getRating());

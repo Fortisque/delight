@@ -31,13 +31,13 @@ public class ServiceReviewActivity extends Activity implements OnItemClickListen
 	}
 	
 	public void populateWaiters() {
-		String[] names = {"Jessica", "Alice", "Nicole", "Jennifer", "Gavin", "Kevin", "David", "Lucy"};
+		String[] names = {"Alice", "Nicole", "Kevin", "Jennifer", "Gavin"};
+		int[] resources = {R.drawable.head1, R.drawable.head2, R.drawable.head3, R.drawable.head4, R.drawable.head5 };
 		waiters = new ArrayList<WaiterCell>();
-		for(int i = 0; i < 8; i++){
-			WaiterCell waiter = new WaiterCell(i+"", names[i], "imageurl");
+		for(int i = 0; i < 5; i++){
+			WaiterCell waiter = new WaiterCell(i+"", names[i], resources[i]);
 			waiters.add(waiter);
 		}
-		
 	}
 
 	@Override
