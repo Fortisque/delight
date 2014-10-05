@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block body %}
   <h1> Reply to Comment </h1>
-  <h3> Message: {{comment}} </h3>
+  <h2> Stars: {{review.stars}} </h3>
+  <h3> Message: {{review.comment}} </h3>
 
   <form>
     Response: <input type="text" name="response">

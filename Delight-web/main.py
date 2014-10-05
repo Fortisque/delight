@@ -353,11 +353,11 @@ class ResponseHandler(webapp2.RequestHandler):
     def get(self):
         business = Business.all().filter('name =', BUSINESS_NAME).get()
 
-        comment = self.request.get('comment')
+        review = Review.get(self.request.get('key'))
 
         template_values = {}
 
-        template_values['comment'] = comment
+        template_values['review'] = review
 
         template = jinja_environment.get_template("response.html")
         self.response.out.write(template.render(template_values))
