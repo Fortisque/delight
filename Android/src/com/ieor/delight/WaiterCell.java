@@ -7,20 +7,20 @@ public class WaiterCell implements Parcelable {
 
 	private String key;
 	private String name;
-	private String imageUrl; //use resource path for mock
+	private String picture; //use resource path for mock
 	private String comment;
 	private float rating;
 	
 	public WaiterCell(String key, String name, String image){
 		this.key = key;
 		this.name = name;
-		this.imageUrl = image;
+		this.picture = image;
 	}
 	
 	public WaiterCell(Parcel in) {
 		this.key = in.readString();
 		this.name = in.readString();
-		this.imageUrl = in.readString();
+		this.picture = in.readString();
 		this.comment = in.readString();
 		this.rating = in.readFloat();
 	} 
@@ -34,7 +34,7 @@ public class WaiterCell implements Parcelable {
 	}
 	
 	public String getImage(){
-		return imageUrl;
+		return picture;
 	}
 	
 	public String getComment(){
@@ -73,7 +73,7 @@ public class WaiterCell implements Parcelable {
 	public void writeToParcel(Parcel parcel, int flags) {
 		parcel.writeString(key);
 		parcel.writeString(name);
-		parcel.writeString(imageUrl);
+		parcel.writeString(picture);
 		parcel.writeString(comment);
 		parcel.writeFloat(rating);
 	}

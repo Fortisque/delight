@@ -1,5 +1,9 @@
 package com.ieor.delight;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import eu.livotov.zxscan.ZXScanHelper;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +12,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -34,9 +39,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if(v.getId() == R.id.buttonScan){
-			//ZXScanHelper.scan(this, QR_SCAN_REQUEST_CODE);
-			Intent intent = new Intent(this, RestaurantHomeActivity.class);
-			startActivity(intent);
+			ZXScanHelper.scan(this, QR_SCAN_REQUEST_CODE);
+//			Intent intent = new Intent(this, RestaurantHomeActivity.class);
+//			startActivity(intent);
 		}
 	}
 	
@@ -44,9 +49,24 @@ public class MainActivity extends Activity implements OnClickListener {
 		if (resultCode == Activity.RESULT_OK && requestCode == QR_SCAN_REQUEST_CODE) {
 			String scannedCode = ZXScanHelper.getScannedCode(data);
 			System.out.println(scannedCode);
-			
-			Intent intent = new Intent(this, RestaurantHomeActivity.class);
-			startActivity(intent);
+			try {
+				JSONObject response =  new JSONObject(scannedCode);
+				System.out.println("response: "+ response.toString());
+				String businessKey = response.getString("business_key");
+				String businessName = response.getString("business_name");
+				String receiptKey = response.getString("receipt_key");
+				JSONArray restaurantData = response.getJSONArray("data");
+				restaurantData.toString();
+				Intent intent = new Intent(this, RestaurantHomeActivity.class);
+				intent.putExtra("busineesKey", businessKey);
+				intent.putExtra("businessName", businessName);
+				intent.putExtra("recieptKey", receiptKey);
+				intent.putExtra("data", restaurantData.toString());
+				startActivity(intent);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Toast.makeText(this, "Please Try Again.", Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 }
