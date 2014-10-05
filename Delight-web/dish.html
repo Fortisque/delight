@@ -11,7 +11,9 @@
 
     <h2>Analysis on {{name}}</h2>
 
-    <img src="{{picture}}" style="width: 200px;" />
+    {% if picture %}
+      <img src="{{picture}}" style="width: 200px;" />
+    {% endif %}
 
     <div id="vis_div"></div>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -24,7 +26,10 @@
           chartType: 'ColumnChart',
           dataTable: [['', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
                       ['', {{star_count[1]}}, {{star_count[2]}}, {{star_count[3]}}, {{star_count[4]}}, {{star_count[5]}}]],
-          options: {'title': ''},
+          options: {
+            'title': '',
+            'vAxis': { 'title': 'Total Reviews' }
+          },
           containerId: 'vis_div'
         });
         wrapper.draw();
@@ -34,14 +39,14 @@
         function selectHandler() {
           var selectedItem = wrapper.getChart().getSelection()[0];
           if (selectedItem) {
-            oTable.fnFilter(selectedItem.column, 0);
+            oTable.fnFilter(selectedItem.column + '.', 0);
           }
         }
       }
     </script>
 
 <h1>Comments</h1>
-<table class="table table-striped" id="datatable">
+<table class="table table-hover" id="datatable">
   <thead>
     <tr>
       <th>Stars</th>
@@ -54,7 +59,7 @@
       <tr>
         <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
         <td>{{review.comment}}</td>
-        <td>{{review.created_at}}</td>
+        <td>{{review.created_at.date()}}</td>
       </tr>
     {% endfor %}
   </tbody>

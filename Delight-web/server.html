@@ -36,7 +36,14 @@
             },
             ticks: [1, 2, 3, 4, 5]
           },
-          vAxis: {title: 'Total Reviews'}
+          vAxis: {
+            title: 'Total Reviews',
+            viewWindow: {
+              min: 0,
+              max: 30
+            },
+            ticks: [0,5,10,15,20,25,30]
+          }
         };
 
         var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
@@ -54,5 +61,5 @@
 
       }
     </script>
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <div id="chart_div"></div>
 {% endblock %}

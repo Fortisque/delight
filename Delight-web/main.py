@@ -102,6 +102,7 @@ class ReviewGeneralHandler(webapp2.RequestHandler):
 
 
         template_values['reviews'] = reviews
+        template_values['url'] = self.request.host
         template_values['star_count'] = star_count
         template = jinja_environment.get_template("general.html")
         self.response.out.write(template.render(template_values))
@@ -167,6 +168,7 @@ class ReviewDishHandler(webapp2.RequestHandler):
 
         template_values['picture'] = food_item.picture            
         template_values['reviews'] = reviews
+        template_values['url'] = self.request.host
         template_values['star_count'] = star_count
         template = jinja_environment.get_template("dish.html")
         self.response.out.write(template.render(template_values))
@@ -233,6 +235,7 @@ class ReviewIndividualHandler(webapp2.RequestHandler):
             star_count[floor(review.stars)] += 1
 
         template_values['reviews'] = reviews
+        template_values['url'] = self.request.host
         template_values['star_count'] = star_count
         template = jinja_environment.get_template("dish.html")
         self.response.out.write(template.render(template_values))
@@ -346,6 +349,20 @@ class BatchReviewHandler(webapp2.RequestHandler):
         } 
         self.response.write(json.dumps(obj))
 
+class ResponseHandler(webapp2.RequestHandler):
+    def get(self):
+        business = Business.all().filter('name =', BUSINESS_NAME).get()
+
+        comment = self.request.get('comment')
+
+        template_values = {}
+
+        template_values['comment'] = comment
+
+        template = jinja_environment.get_template("response.html")
+        self.response.out.write(template.render(template_values))
+
+
 app = webapp2.WSGIApplication([
     ('/', ReviewGeneralHandler),
     ('/receipt', ReceiptHandler),
@@ -355,5 +372,6 @@ app = webapp2.WSGIApplication([
     ('/review/server/individual', ReviewIndividualHandler),
     ('/review/', ReviewGeneralHandler),
     ('/batch_reviews', BatchReviewHandler),
-    ('/reset_and_seed', ResetAndSeedHandler)
+    ('/reset_and_seed', ResetAndSeedHandler),
+    ('/response', ResponseHandler)
 ], debug=True)
