@@ -27,7 +27,7 @@ from math import floor
 
 from models import *
 
-BUSINESS_NAME = 'Gecko Gecko'
+BUSINESS_NAME = 'Eureka'
 
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
@@ -70,7 +70,7 @@ class ReceiptHandler(webapp2.RequestHandler):
 
         json_data = {
             "website": "delight-food.appspot.com",
-            "data": json.dumps(gql_json_parser(query_data)),
+            "data": gql_json_parser(query_data),
             "receipt_key": receipt_key,
             "business_name": business.name,
             "business_key": str(business.key())
@@ -98,7 +98,7 @@ class ReviewGeneralHandler(webapp2.RequestHandler):
 
         star_count = defaultdict(int)
         for review in reviews:
-            star_count[review.stars] += 1
+            star_count[floor(review.stars)] += 1
 
 
         template_values['reviews'] = reviews
@@ -124,7 +124,7 @@ class ReviewFoodHandler(webapp2.RequestHandler):
             summation = 0
             count = 0
             for review in reviews:
-                star_count[review.stars] += 1
+                star_count[floor(review.stars)] += 1
                 count += 1
                 summation += review.stars
 
@@ -163,7 +163,7 @@ class ReviewDishHandler(webapp2.RequestHandler):
 
         star_count = defaultdict(int)
         for review in reviews:
-            star_count[review.stars] += 1
+            star_count[floor(review.stars)] += 1
 
         template_values['reviews'] = reviews
         template_values['star_count'] = star_count
@@ -196,7 +196,7 @@ class ReviewServerHandler(webapp2.RequestHandler):
             summation = 0
             count = 0
             for review in servers[server_name]:
-                star_count[review.stars] += 1
+                star_count[floor(review.stars)] += 1
                 count += 1
                 summation += review.stars
 
@@ -213,17 +213,28 @@ class ReviewServerHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template("server.html")
         self.response.out.write(template.render(template_values))
 
-class AnalyzeHandler(webapp2.RequestHandler):
+class ReviewIndividualHandler(webapp2.RequestHandler):
     def get(self):
-        business = Business.all().filter('name =', BUSINESS_NAME).get()
         template_values = {}
-        template_values['food_items'] = FoodItem.gql("WHERE business_key = :1", str(business.key()))
-        template = jinja_environment.get_template("analyze.html")
-        self.response.out.write(template.render(template_values))
 
-class FoodHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.write("hello")
+        template_values['name'] = self.request.get('name')
+
+        today = datetime.today()
+        yesterday = today - timedelta(1)
+        lower_limit = self.request.get('lower_date') or yesterday
+        upper_limit = self.request.get('upper_date') or today
+
+        business = Business.all().filter('name =', BUSINESS_NAME).get()
+        reviews = Review.gql("WHERE business_key = :1 AND target = :2 AND created_at > :3 AND created_at < :4", str(business.key()), template_values['name'], lower_limit, upper_limit)
+
+        star_count = defaultdict(int)
+        for review in reviews:
+            star_count[floor(review.stars)] += 1
+
+        template_values['reviews'] = reviews
+        template_values['star_count'] = star_count
+        template = jinja_environment.get_template("dish.html")
+        self.response.out.write(template.render(template_values))
 
 class ResetAndSeedHandler(webapp2.RequestHandler):
     def get(self):
@@ -249,9 +260,9 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         a_business = Business(name=BUSINESS_NAME).put()
 
-        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=10.0, business_key=str(a_business), kind_of_food='Rice').put()
-        test_food_item_2 = FoodItem(name='Pad Thai', cost=9.75, business_key=str(a_business), kind_of_food='Noodles').put()
-        test_food_item_3 = FoodItem(name='Pad See ew', cost=8.75, business_key=str(a_business), kind_of_food='Noodles').put()
+        test_food_item = FoodItem(name='Fresno Fig Burger', cost=9.75, business_key=str(a_business), kind_of_food='Burger').put()
+        test_food_item_2 = FoodItem(name='Fried Chicken Sliders', cost=12.75, business_key=str(a_business), kind_of_food='Signature').put()
+        test_food_item_3 = FoodItem(name='Cowboy Burger', cost=7.75, business_key=str(a_business), kind_of_food='Burger').put()
 
         a_receipt = Receipt(name='test_receipt').put()
 
@@ -262,11 +273,6 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
         data = [
             {
                 'comment': 'great',
-                'target': str(test_food_item),
-                'kind': 'food'
-            },
-            {
-                'comment': 'nice',
                 'target': str(test_food_item),
                 'kind': 'food'
             },
@@ -291,12 +297,12 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
                 'kind': 'general'
             },
             {
-                'comment': 'hi bob',
+                'comment': 'hi jennifer',
                 'target': 'Jennifer',
                 'kind': 'service'
             },
             {
-                'comment': 'hi jim',
+                'comment': 'hi kevin',
                 'target': 'Kevin',
                 'kind': 'service'
             }
@@ -312,7 +318,7 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
         self.response.write("success")
 
 class BatchReviewHandler(webapp2.RequestHandler):
-    def get(self):
+    def post(self):
         data = self.request.get('data')
         receipt_key = self.request.get('receipt_key')
         business_key = self.request.get('business_key')
@@ -325,11 +331,12 @@ class BatchReviewHandler(webapp2.RequestHandler):
         self.response.write("success")
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),
+    ('/', ReviewGeneralHandler),
     ('/receipt', ReceiptHandler),
     ('/review/food', ReviewFoodHandler),
     ('/review/food/dish', ReviewDishHandler),
     ('/review/server', ReviewServerHandler),
+    ('/review/server/individual', ReviewIndividualHandler),
     ('/review/', ReviewGeneralHandler),
     ('/batch_reviews', BatchReviewHandler),
     ('/reset_and_seed', ResetAndSeedHandler)
