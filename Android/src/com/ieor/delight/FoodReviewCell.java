@@ -12,8 +12,6 @@ public class FoodReviewCell {
 		this.id = id;
 		this.name = name;
 		this.imageUrl = imageUrl;
-		this.rating = -1;
-		this.comment = "";
 	}
 	
 	public String getName(){

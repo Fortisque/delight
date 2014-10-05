@@ -28,7 +28,7 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 			Intent intent = new Intent(this, FoodReviewActivity.class);
 			startActivity(intent);
 		} else if (v.getId() == R.id.buttonServiceReview) {
-			Intent intent = new Intent(this, FoodReviewActivity.class);
+			Intent intent = new Intent(this, ServiceReviewActivity.class);
 			startActivity(intent);
 		}
 	}

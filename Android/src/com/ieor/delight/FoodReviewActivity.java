@@ -13,7 +13,7 @@ import android.widget.ListView;
 public class FoodReviewActivity extends ListActivity implements OnClickListener {
 	
 	Button nextButton;
-	ArrayList<Row> reviews = new ArrayList<Row>();
+	ArrayList<Row> reviews;
 	FoodReviewAdapter adapter;
 
 	@Override
@@ -45,7 +45,8 @@ public class FoodReviewActivity extends ListActivity implements OnClickListener 
 	public void populateReviews(){
 		//make get request
 		//mock data for now
-		for(int i = 1; i < 20; i++){
+		reviews = new ArrayList<Row>();
+		for(int i = 1; i <= 12; i++){
 			FoodReviewCell food  = new FoodReviewCell(i, "Food " + i, "image" + i);
 			Row row = new Row(Row.REVIEW, food);
 			reviews.add(row);

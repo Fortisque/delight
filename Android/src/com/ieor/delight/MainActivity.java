@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,6 +12,7 @@ import android.widget.Button;
 public class MainActivity extends Activity implements OnClickListener {
 	
 	Button scanButton;
+	public final static int QR_SCAN_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,24 +30,18 @@ public class MainActivity extends Activity implements OnClickListener {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
 	@Override
 	public void onClick(View v) {
 		if(v.getId() == R.id.buttonScan){
 			Intent intent = new Intent(this, RestaurantHomeActivity.class);
 			startActivity(intent);
+		}
+	}
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == Activity.RESULT_OK && requestCode == QR_SCAN_REQUEST_CODE) {
+			//String scannedCode = ZXScanHelper.getScannedCode(data);
+			//System.out.println(scannedCode);
 		}
 	}
 }
