@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 {% block body %}
   <h1> Dashboard </h1>
-    <a href="/review/"> General </a>
-    <a href="/review/food"> Food </a>
-    <a href="/review/server"> Server </a>
+    <div class="sub-nav">
+        <ul>
+            <li><a href="/review/"> General </a></li>
+            <li><a href="/review/food"> Food </a></li>
+            <li><a href="/review/server"> Server </a></li>
+        <ul>
+    </div>
 
     <h2>Analysis on {{name}}</h2>
 

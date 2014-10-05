@@ -17,12 +17,12 @@
 	    google.setOnLoadCallback(drawChart);
 	    function drawChart() {
 	      var arr = [];
-	      arr.push(['Name', 'Average Rating', 'Total Reviews']);
+	      arr.push(['Name', 'Average Rating', 'Cost', 'Type', 'Total Reviews']);
 	      var food_items = {{food_items}}
 	      for(var name in food_items) {
 	        var values = food_items[name];
 	        var star_count = values['star_count'];
-	        arr.push([name, values['average'], values['total']])
+	        arr.push([name, values['average'], values['price'], values['type'], values['total']])
 	      }
 
 	      var data = google.visualization.arrayToDataTable(arr);
@@ -36,7 +36,10 @@
             },
             ticks: [1, 2, 3, 4, 5]
           },
-	        vAxis: {title: 'Total Reviews'}
+	        vAxis: {
+	        	title: 'Price',
+	        	viewWindowMode: 'pretty'
+	        }
 	      };
 
 	      var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
@@ -53,5 +56,5 @@
 
 	    }
 	  </script>
-	  <div id="chart_div" style="width: 900px; height: 500px;"></div>
+	  <div id="chart_div"></div>
 {% endblock %}

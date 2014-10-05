@@ -77,7 +77,7 @@ class ReceiptHandler(webapp2.RequestHandler):
         }
 
         template_values['food_items'] = query_data
-        template_values['json_query_data'] = json_data
+        template_values['json_query_data'] = json.dumps(json_data)
         template_values['QR_url'] = "http://api.qrserver.com/v1/create-qr-code/?data=%s&size=250x250" % (template_values["json_query_data"],)
         template = jinja_environment.get_template("receipt.html")
         self.response.out.write(template.render(template_values))
@@ -134,9 +134,11 @@ class ReviewFoodHandler(webapp2.RequestHandler):
             food_items[food_item.name] = {
                 "average": average,
                 "picture": food_item.picture,
+                "price": food_item.cost,
                 "total": count,
                 "key": str(food_item.key()),
-                "star_count": star_count
+                "star_count": star_count,
+                "type": food_item.kind_of_food
             }
 
         template_values['food_items'] = json.dumps(food_items)
@@ -247,9 +249,9 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         a_business = Business(name=BUSINESS_NAME).put()
 
-        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=10.0, business_key=str(a_business)).put()
-        test_food_item_2 = FoodItem(name='Pad Thai', cost=9.75, business_key=str(a_business)).put()
-        test_food_item_3 = FoodItem(name='Pad See ew', cost=8.75, business_key=str(a_business)).put()
+        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=10.0, business_key=str(a_business), kind_of_food='Rice').put()
+        test_food_item_2 = FoodItem(name='Pad Thai', cost=9.75, business_key=str(a_business), kind_of_food='Noodles').put()
+        test_food_item_3 = FoodItem(name='Pad See ew', cost=8.75, business_key=str(a_business), kind_of_food='Noodles').put()
 
         a_receipt = Receipt(name='test_receipt').put()
 
