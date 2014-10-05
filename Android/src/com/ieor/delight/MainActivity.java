@@ -1,6 +1,6 @@
 package com.ieor.delight;
 
-import eu.livotov.zxscan.ZXScanHelper;
+//import eu.livotov.zxscan.ZXScanHelper;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,8 +42,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK && requestCode == QR_SCAN_REQUEST_CODE) {
-			String scannedCode = ZXScanHelper.getScannedCode(data);
-			System.out.println(scannedCode);
+			/*String scannedCode = ZXScanHelper.getScannedCode(data);
+			System.out.println(scannedCode);*/
 			
 			Intent intent = new Intent(this, RestaurantHomeActivity.class);
 			startActivity(intent);
