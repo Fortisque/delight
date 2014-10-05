@@ -261,9 +261,9 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         a_business = Business(name=BUSINESS_NAME).put()
 
-        test_food_item = FoodItem(name='Fresno Fig Burger', cost=9.75, business_key=str(a_business), kind_of_food='Burger', picture='http://a3.urbancdn.com/w/s/7Z/DlSMbQUJWorvru-640m.jpg').put()
+        test_food_item = FoodItem(name='Fresno Fig Burger', cost=9.75, business_key=str(a_business), kind_of_food='Burger', picture='http://delight-food.appspot.com/static/fresno_fig_burger.png').put()
         test_food_item_2 = FoodItem(name='Fried Chicken Sliders', cost=12.75, business_key=str(a_business), kind_of_food='Signature', picture='http://www.foodrepublic.com/sites/default/files/imagecache/enlarge/recipe/sipsnbites_chickenslider.jpg').put()
-        test_food_item_3 = FoodItem(name='Cowboy Burger', cost=7.75, business_key=str(a_business), kind_of_food='Burger', picture='http://www.applebees.com/~/media/ABs0625/Website_Images_4_ms/MenuC_579x441/Cowboy_Burger.jpg').put()
+        test_food_item_3 = FoodItem(name='Cowboy Burger', cost=7.75, business_key=str(a_business), kind_of_food='Burger', picture='http://delight-food.appspot.com/static/cowboy_burger.png').put()
 
         a_receipt = Receipt(name='test_receipt').put()
 
