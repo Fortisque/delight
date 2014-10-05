@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block body %}
+  <h1> Dashboard </h1>
+    <a href="/review/"> General </a>
+    <a href="/review/food"> Food </a>
+    <a href="/review/server"> Server </a>
+
+    <h2>Analysis on {{name}}</h2>
+
+    <div id="vis_div"></div>
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1');   // Don't need to specify chart libraries!
+      google.setOnLoadCallback(drawVisualization);
+
+      function drawVisualization() {
+        var wrapper = new google.visualization.ChartWrapper({
+          chartType: 'ColumnChart',
+          dataTable: [['', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+                      ['', {{star_count[1]}}, {{star_count[2]}}, {{star_count[3]}}, {{star_count[4]}}, {{star_count[5]}}]],
+          options: {'title': ''},
+          containerId: 'vis_div'
+        });
+        wrapper.draw();
+      }
+    </script>
+
+    
+    {% for review in reviews %}
+      <div>{{review.comment}}</div>
+    {% endfor %}
+{% endblock %}

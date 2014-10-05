@@ -6,29 +6,41 @@
 	<a href="/review/server"> Server </a>
 
 	<h2> dishes here </h2>
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['ID', 'X', 'Y', 'Temperature'],
-          ['',   80,  167,      120],
-          ['',   79,  136,      130],
-          ['',   78,  184,      50],
-          ['',   72,  278,      230],
-          ['',   81,  200,      210],
-          ['',   72,  170,      100],
-          ['',   68,  477,      80]
-        ]);
+ 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript">
+	    google.load("visualization", "1", {packages:["corechart"]});
+	    google.setOnLoadCallback(drawChart);
+	    function drawChart() {
+	      var arr = [];
+	      arr.push(['Name', 'Average Rating', 'Total Reviews']);
+	      var food_items = {{food_items}}
+	      for(var name in food_items) {
+	        var values = food_items[name];
+	        var star_count = values['star_count'];
+	        arr.push([name, values['average'], values['total']])
+	      }
 
-        var options = {
-          colorAxis: {colors: ['yellow', 'red']}
-        };
+	      var data = google.visualization.arrayToDataTable(arr);
 
-        var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    </script>
-  {{food_items}}
+	      var options = {
+	        hAxis: {title: 'Average Rating'},
+	        vAxis: {title: 'Total Reviews'}
+	      };
+
+	      var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+	      google.visualization.events.addListener(chart, 'select', selectHandler);
+	      function selectHandler() {
+	        var selectedItem = chart.getSelection()[0];
+	        if (selectedItem) {
+	          var value = data.getValue(selectedItem.row, 0); // 0 because no columns
+	          window.location.href = window.location.href + '/dish?name=' + value;
+	        }
+	      }
+
+	      chart.draw(data, options);
+
+	    }
+	  </script>
+	  <div id="chart_div" style="width: 900px; height: 500px;"></div>
+	  {{food_items}}
 {% endblock %}
