@@ -98,7 +98,7 @@ class ReviewGeneralHandler(webapp2.RequestHandler):
 
         star_count = defaultdict(int)
         for review in reviews:
-            star_count[review.stars] += 1
+            star_count[floor(review.stars)] += 1
 
 
         template_values['reviews'] = reviews
@@ -124,7 +124,7 @@ class ReviewFoodHandler(webapp2.RequestHandler):
             summation = 0
             count = 0
             for review in reviews:
-                star_count[review.stars] += 1
+                star_count[floor(review.stars)] += 1
                 count += 1
                 summation += review.stars
 
@@ -237,10 +237,9 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
 
         a_business = Business(name=BUSINESS_NAME).put()
 
-        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=15.25, business_key=str(a_business), kind_of_food='Rice').put()
-        test_food_item_2 = FoodItem(name='Pad Thai', cost=9.75, business_key=str(a_business), kind_of_food='Noodles').put()
-        test_food_item_3 = FoodItem(name='Pad See ew', cost=8.75, business_key=str(a_business), kind_of_food='Noodles').put()
-        test_food_item_4 = FoodItem(name='Basil Fried Rice', cost=5.75, business_key=str(a_business), kind_of_food='Rice').put()
+        test_food_item = FoodItem(name='Pineapple Fried Rice', cost=9.75, business_key=str(a_business), kind_of_food='Rice').put()
+        test_food_item_2 = FoodItem(name='Pad Thai', cost=7.75, business_key=str(a_business), kind_of_food='Noodles').put()
+        test_food_item_3 = FoodItem(name='Pad See ew', cost=5.75, business_key=str(a_business), kind_of_food='Noodles').put()
 
         a_receipt = Receipt(name='test_receipt').put()
 
@@ -252,11 +251,6 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
             {
                 'comment': 'great',
                 'target': str(test_food_item),
-                'kind': 'food'
-            },
-            {
-                'comment': 'nice',
-                'target': str(test_food_item_4),
                 'kind': 'food'
             },
             {
@@ -314,7 +308,7 @@ class BatchReviewHandler(webapp2.RequestHandler):
         self.response.write("success")
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),
+    ('/', ReviewGeneralHandler),
     ('/receipt', ReceiptHandler),
     ('/review/food', ReviewFoodHandler),
     ('/review/food/dish', ReviewDishHandler),
