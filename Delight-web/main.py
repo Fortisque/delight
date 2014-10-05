@@ -100,7 +100,7 @@ class ReviewGeneralHandler(webapp2.RequestHandler):
 
 
         template_values['reviews'] = reviews
-        template_values['star_count'] = json.dumps(star_count)
+        template_values['star_count'] = star_count
         template = jinja_environment.get_template("general.html")
         self.response.out.write(template.render(template_values))
 
