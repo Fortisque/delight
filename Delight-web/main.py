@@ -30,8 +30,7 @@ from models import *
 BUSINESS_NAME = 'Gecko Gecko'
 
 jinja_environment = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
-    autoescape=True)
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
 def gql_json_parser(query_obj):
     result = []
@@ -187,9 +186,26 @@ class ReviewServerHandler(webapp2.RequestHandler):
             else:
                 servers[server_name] = [review]
 
-        for server in servers:
-            pass
+        servers_data = {}
+        for server_name in servers:
+            star_count = defaultdict(int)
+            summation = 0
+            count = 0
+            for review in servers[server_name]:
+                star_count[review.stars] += 1
+                count += 1
+                summation += review.stars
 
+            if count == 0:
+                count = 1
+            average = summation * 1.0 / count
+            servers_data[server_name] = {
+                "average": average,
+                "total": count,
+                "star_count": star_count
+            }
+
+        template_values['servers_data'] = json.dumps(servers_data)
         template = jinja_environment.get_template("server.html")
         self.response.out.write(template.render(template_values))
 
@@ -272,12 +288,12 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
             },
             {
                 'comment': 'hi bob',
-                'target': '',
+                'target': 'Jennifer',
                 'kind': 'service'
             },
             {
                 'comment': 'hi jim',
-                'target': '',
+                'target': 'Kevin',
                 'kind': 'service'
             }
         ]
