@@ -2,9 +2,9 @@
 {% block body %}
 
     <h1> Dashboard </h1>
-    <a href="/review/"> General </a>
-    <a href="/review/food"> Food </a>
-    <a href="/review/server"> Server </a>
+    <p><a href="/review/"> General </a></p>
+    <p><a href="/review/food"> Food </a></p>
+    <p><a href="/review/server"> Server </a></p>
 
     
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -32,7 +32,5 @@
     {% for review in reviews %}
         <div>{{review.comment}}</div>
     {% endfor %}
-
-    {{star_count}}
 
 {% endblock %}
