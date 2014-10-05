@@ -7,12 +7,15 @@
 
     <Button
         android:id="@+id/buttonScan"
+        style="@style/homeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="99dp"
-        android:layout_marginRight="76dp"
-        android:text="Scan QR Code" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="81dp"
+        android:background="@drawable/home_button_border"
+        android:padding="@dimen/button_padding"
+        android:text="Scan QR Code"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
