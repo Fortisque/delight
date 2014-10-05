@@ -41,6 +41,15 @@
 
         var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
 
+        google.visualization.events.addListener(chart, 'select', selectHandler);
+        function selectHandler() {
+          var selectedItem = chart.getSelection()[0];
+          if (selectedItem) {
+            var value = data.getValue(selectedItem.row, 0); // 0 because no columns
+            window.location.href = window.location.href + '/individual?name=' + value;
+          }
+        }
+
         chart.draw(data, options);
 
       }

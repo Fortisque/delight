@@ -163,7 +163,7 @@ class ReviewDishHandler(webapp2.RequestHandler):
 
         star_count = defaultdict(int)
         for review in reviews:
-            star_count[review.stars] += 1
+            star_count[floor(review.stars)] += 1
 
         template_values['reviews'] = reviews
         template_values['star_count'] = star_count
@@ -196,7 +196,7 @@ class ReviewServerHandler(webapp2.RequestHandler):
             summation = 0
             count = 0
             for review in servers[server_name]:
-                star_count[review.stars] += 1
+                star_count[floor(review.stars)] += 1
                 count += 1
                 summation += review.stars
 
@@ -211,6 +211,29 @@ class ReviewServerHandler(webapp2.RequestHandler):
 
         template_values['servers_data'] = json.dumps(servers_data)
         template = jinja_environment.get_template("server.html")
+        self.response.out.write(template.render(template_values))
+
+class ReviewIndividualHandler(webapp2.RequestHandler):
+    def get(self):
+        template_values = {}
+
+        template_values['name'] = self.request.get('name')
+
+        today = datetime.today()
+        yesterday = today - timedelta(1)
+        lower_limit = self.request.get('lower_date') or yesterday
+        upper_limit = self.request.get('upper_date') or today
+
+        business = Business.all().filter('name =', BUSINESS_NAME).get()
+        reviews = Review.gql("WHERE business_key = :1 AND target = :2 AND created_at > :3 AND created_at < :4", str(business.key()), template_values['name'], lower_limit, upper_limit)
+
+        star_count = defaultdict(int)
+        for review in reviews:
+            star_count[floor(review.stars)] += 1
+
+        template_values['reviews'] = reviews
+        template_values['star_count'] = star_count
+        template = jinja_environment.get_template("dish.html")
         self.response.out.write(template.render(template_values))
 
 class ResetAndSeedHandler(webapp2.RequestHandler):
@@ -274,12 +297,12 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
                 'kind': 'general'
             },
             {
-                'comment': 'hi bob',
+                'comment': 'hi jennifer',
                 'target': 'Jennifer',
                 'kind': 'service'
             },
             {
-                'comment': 'hi jim',
+                'comment': 'hi kevin',
                 'target': 'Kevin',
                 'kind': 'service'
             }
@@ -313,6 +336,7 @@ app = webapp2.WSGIApplication([
     ('/review/food', ReviewFoodHandler),
     ('/review/food/dish', ReviewDishHandler),
     ('/review/server', ReviewServerHandler),
+    ('/review/server/individual', ReviewIndividualHandler),
     ('/review/', ReviewGeneralHandler),
     ('/batch_reviews', BatchReviewHandler),
     ('/reset_and_seed', ResetAndSeedHandler)
