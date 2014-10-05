@@ -6,10 +6,24 @@
     <!--<link rel="stylesheet" href="static/css/bootstrap.css">
     <link rel="stylesheet" href="static/css/base.css">-->
     <style>
+        span.stars, span.stars span {
+            display: block;
+            background: url("/static/star.png") 0 -16px repeat-x;
+            width: 80px;
+            height: 16px;
+        }
+
+        span.stars span {
+            background-position: 0 0;
+        }
+
+        .hidden {
+            display: none;
+        }
         body {
-            /*background: url(http://s3.amazonaws.com/siteninja/site-ninja1-com/1357772979/original/Eureka-Restuarant-Santa-Barbara_02.jpg?1357772952) fixed; 
+            background: url(http://s3.amazonaws.com/siteninja/site-ninja1-com/1357772979/original/Eureka-Restuarant-Santa-Barbara_02.jpg?1357772952) fixed; 
             background-size: cover;
-            background-repeat: no-repeat;*/
+            background-repeat: no-repeat;
             margin: 0px;
             padding: 0px;
         }
@@ -113,6 +127,20 @@
         }
                 
     </style>
+
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script>
+        $.fn.stars = function() {
+            return $(this).each(function() {
+                $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
+            });
+
+        }
+
+        $(function() {
+            $('span.stars').stars();
+        });
+    </script>
 </head>
 <body>
     <div id="header">
