@@ -13,21 +13,54 @@
 
     
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <div>
+        <h2>General Analysis</h2>
+        <div id="daily_rating"></div>
+    </div>
 
-	<h2> General Analysis </h2>
     
-    <div id="daily_rating"></div>
+    <div>
+        <h2>Comments</h2>
+        <table class="table table-hover compact" id="datatable">
+          <thead>
+            <tr>
+              <th>Stars</th>
+              <th>Comment</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for review in reviews %}
+              <tr>
+                <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
+                <td>{{review.comment}}</td>
+                <td>{{review.created_at.date()}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
     <script type="text/javascript">
       google.load('visualization', '1');   // Don't need to specify chart libraries!
       google.setOnLoadCallback(drawVisualization);
 
       function drawVisualization() {
         var wrapper = new google.visualization.ChartWrapper({
-          chartType: 'ColumnChart',
-          dataTable: [['', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
-                      ['', {{star_count[1]}}, {{star_count[2]}}, {{star_count[3]}}, {{star_count[4]}}, {{star_count[5]}}]],
-          options: {'title': '', 'vAxis': { 'title': 'Total Reviews' }},
+          chartType: 'BarChart',
+          dataTable: google.visualization.arrayToDataTable([
+             ['Rating', 'Number of ratings', { role: 'style' }, { role: 'annotation' } ],
+             ['1 Star', {{star_count[1]}}, 'fill-color: red; fill-opacity: 0.8', {{star_count[1]}} ],
+             ['2 Stars', {{star_count[2]}}, 'fill-color: orange; fill-opacity: 0.8', {{star_count[2]}} ],
+             ['3 Stars', {{star_count[3]}}, 'fill-color: yellow; fill-opacity: 0.8', {{star_count[3]}} ],
+             ['4 Stars', {{star_count[4]}}, 'fill-color: green; fill-opacity: 0.5', {{star_count[4]}} ],
+             ['5 Stars', {{star_count[5]}}, 'fill-color: green; fill-opacity: 0.8', {{star_count[5]}} ]
+          ]),
+
+          options: {'title': 'Today', 'vAxis': { 'title': 'Total Reviews' }},
           containerId: 'daily_rating'
         });
 
@@ -47,30 +80,5 @@
       }
     </script>
 
-<h1>Comments</h1>
 
-
-<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-
-<link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
-
-
-<table class="table table-hover compact" id="datatable">
-  <thead>
-    <tr>
-      <th>Stars</th>
-      <th>Comment</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for review in reviews %}
-      <tr>
-        <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
-        <td>{{review.comment}}</td>
-        <td>{{review.created_at.date()}}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
 {% endblock %}

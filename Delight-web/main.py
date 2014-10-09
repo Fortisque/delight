@@ -271,7 +271,7 @@ class ResetAndSeedHandler(webapp2.RequestHandler):
         a_receipt = Receipt(name='test_receipt').put()
 
         ReceiptsFoodItems(food_item_key=str(test_food_item), receipt_key=str(a_receipt)).put()
-        ReceiptsFoodItems(food_item_key=str(test_food_item_2), receipt_key=str(a_receipt)).put()
+        ReceiptsFoodItems(food_item_key=str(test_food_item_3), receipt_key=str(a_receipt)).put()
 
         receipt_key = str(a_receipt)
         data = [
