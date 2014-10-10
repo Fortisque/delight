@@ -1,0 +1,63 @@
+h2 {
+    font-size: 150%;
+}
+
+.widget {
+    padding: 0;
+}
+
+.panel {
+    border: none;
+}
+
+.panel-heading {
+    background-color: rgb(45,45,45);
+    color: #eee;
+    text-align: center;
+}
+
+.panel-footer {
+    background-color: rgb(45,45,45);
+    color: white;
+    text-align: center;
+}
+
+.col-md-7 .panel {
+    width: 98%;
+}
+
+.number {
+    font-size: 300%;
+}
+
+.label {
+    font-size: 120%;
+}
+
+.sub-nav {
+    width: 100%;
+}
+
+.sub-nav ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.sub-nav li {
+    display: inline;
+    margin: 0px;
+}
+
+.sub-nav a {
+    color:black;
+    text-decoration: none;
+    background-color: white;
+    padding: 1%;
+    font-size: 180%;
+}
+
+.sub-nav a:hover {
+    background-color: rgb(45,45,45);
+    color: white;
+}
