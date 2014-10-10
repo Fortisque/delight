@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
+    <link rel="stylesheet" type="text/css" href="/static/analysis.css">
 
     <h1> Dashboard</h1>
 
@@ -14,31 +15,44 @@
     
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <div>
-        <h2>General Analysis</h2>
-        <div id="daily_rating"></div>
     </div>
 
+    <div class="col-md-7 widget">
+        <div class="panel">
+            <div class="panel-heading"><h2>Ratings for Today</h2></div>
+            <div class="panel-body" id="daily_rating" style="width:100%;"></div>
+            <div class="panel-footer">
+                <div class="number">4.6</div>
+                <div class="label">Average Rating</div>
+            </div>
+        </div>
+        
+    </div>
     
-    <div>
-        <h2>Comments</h2>
-        <table class="table table-hover compact" id="datatable">
-          <thead>
-            <tr>
-              <th>Stars</th>
-              <th>Comment</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for review in reviews %}
-              <tr>
-                <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
-                <td>{{review.comment}}</td>
-                <td>{{review.created_at.date()}}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <div class="col-md-5 widget">
+        <div class="panel">
+            <div class="panel-heading"><h2>Comments</h2></div>
+            <div class="panel-body">
+                <table class="table table-hover compact" id="datatable">
+                  <thead>
+                    <tr>
+                      <th>Stars</th>
+                      <th>Comment</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for review in reviews %}
+                      <tr>
+                        <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
+                        <td>{{review.comment}}</td>
+                        <td>{{review.created_at.date()}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -53,14 +67,14 @@
           chartType: 'BarChart',
           dataTable: google.visualization.arrayToDataTable([
              ['Rating', 'Number of ratings', { role: 'style' }, { role: 'annotation' } ],
-             ['1 Star', {{star_count[1]}}, 'fill-color: red; fill-opacity: 0.8', {{star_count[1]}} ],
+             ['1 Star', {{star_count[1]}}, 'fill-color: #ff3300; fill-opacity: 0.8', {{star_count[1]}} ],
              ['2 Stars', {{star_count[2]}}, 'fill-color: orange; fill-opacity: 0.8', {{star_count[2]}} ],
              ['3 Stars', {{star_count[3]}}, 'fill-color: yellow; fill-opacity: 0.8', {{star_count[3]}} ],
-             ['4 Stars', {{star_count[4]}}, 'fill-color: green; fill-opacity: 0.5', {{star_count[4]}} ],
+             ['4 Stars', {{star_count[4]}}, 'fill-color: rgb(116, 216, 16); fill-opacity: 0.8', {{star_count[4]}} ],
              ['5 Stars', {{star_count[5]}}, 'fill-color: green; fill-opacity: 0.8', {{star_count[5]}} ]
           ]),
 
-          options: {'title': 'Today', 'vAxis': { 'title': 'Total Reviews' }},
+          options: {'title': '', 'vAxis': { 'title': 'Total Reviews' }},
           containerId: 'daily_rating'
         });
 
