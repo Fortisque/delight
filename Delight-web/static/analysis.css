@@ -8,6 +8,7 @@ h2 {
 
 .panel {
     border: none;
+    overflow: hidden;
 }
 
 .panel-heading {
