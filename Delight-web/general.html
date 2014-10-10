@@ -6,7 +6,7 @@
         <ul>
             <li><a class="selected" href="/review/"> General </a></li>
             <li><a href="/review/food"> Food </a></li>
-            <li><a href="/review/server"> Server </a></li>
+            <li><a href="/review/server"> Waiter </a></li>
         <ul>
     </div>
 
@@ -16,7 +16,7 @@
 
     <div class="col-md-7 widget">
         <div class="panel">
-            <div class="panel-heading"><h2>Ratings for Today</h2></div>
+            <div class="panel-heading"><h2>General Ratings for Today</h2></div>
             <div class="panel-body" id="daily_rating" style="width:100%;"></div>
             <div class="panel-footer">
                 <div class="number">4.6</div>
@@ -63,7 +63,7 @@
         var wrapper = new google.visualization.ChartWrapper({
           chartType: 'BarChart',
           dataTable: google.visualization.arrayToDataTable([
-             ['Rating', 'Number of ratings', { role: 'style' }, { role: 'annotation' } ],
+             ['Rating', '# ratings', { role: 'style' }, { role: 'annotation' } ],
              ['1 Star', {{star_count[1]}}, 'fill-color: #ff3300; fill-opacity: 0.8', {{star_count[1]}} ],
              ['2 Stars', {{star_count[2]}}, 'fill-color: orange; fill-opacity: 0.8', {{star_count[2]}} ],
              ['3 Stars', {{star_count[3]}}, 'fill-color: yellow; fill-opacity: 0.8', {{star_count[3]}} ],
@@ -71,7 +71,9 @@
              ['5 Stars', {{star_count[5]}}, 'fill-color: green; fill-opacity: 0.8', {{star_count[5]}} ]
           ]),
 
-          options: {'title': '', 'vAxis': { 'title': 'Total Reviews' }},
+          options: {'title': '', 'vAxis': { 'title': 'Total Reviews' },
+                    'legend': {'position': 'top', 'textStyle': {'color': 'green', 'fontSize': 16}}
+        },
           containerId: 'daily_rating'
         });
 

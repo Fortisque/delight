@@ -10,7 +10,30 @@
         <ul>
     </div>
 
-	<h2> Food Analysis </h2>
+    <div class="col-md-7 widget">
+        <div class="panel">
+            <div class="panel-heading"><h2>Distribution of Dish Reviews for Today</h2></div>
+            <div class="panel-body" id="chart_div" style="width:100%;"></div>
+            <div class="panel-footer">
+                <div class="number">50%</div>
+                <div class="label">dishes have an average rating of 3 stars or better</div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="col-md-5 widget">
+        <div class="panel">
+            <div class="panel-heading"><h2>Food Ratings for Today</h2></div>
+            <div class="panel-body" id="chart_div" style="width:100%;"></div>
+            <div class="panel-footer">
+                <div class="number">4.6</div>
+                <div class="label">Average Rating</div>
+            </div>
+        </div>
+        
+    </div>
+
  	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script type="text/javascript">
 	    google.load("visualization", "1", {packages:["corechart"]});
@@ -60,5 +83,4 @@
 
 	    }
 	  </script>
-	  <div id="chart_div"></div>
 {% endblock %}
