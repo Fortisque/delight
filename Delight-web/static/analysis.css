@@ -61,3 +61,8 @@ h2 {
     background-color: rgb(45,45,45);
     color: white;
 }
+
+.sub-nav a.selected {
+    background-color: rgb(45,45,45);
+    color: white;
+}
