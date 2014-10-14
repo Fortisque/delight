@@ -66,21 +66,23 @@ class ReceiptHandler(webapp2.RequestHandler):
         for food_item_receipt in ReceiptsFoodItems.gql("WHERE receipt_key = :1", receipt_key):
             food_item_keys.append(food_item_receipt.food_item_key)
 
+
         query_data = FoodItem.get(food_item_keys)
+        if self.request.get('json'):
+            json_data = {
+                "website": "delight-food.appspot.com",
+                "data": gql_json_parser(query_data),
+                "receipt_key": receipt_key,
+                "business_name": business.name,
+                "business_key": str(business.key())
+            }
 
-        json_data = {
-            "website": "delight-food.appspot.com",
-            "data": gql_json_parser(query_data),
-            "receipt_key": receipt_key,
-            "business_name": business.name,
-            "business_key": str(business.key())
-        }
-
-        template_values['food_items'] = query_data
-        template_values['json_query_data'] = json.dumps(json_data)
-        template_values['QR_url'] = "http://api.qrserver.com/v1/create-qr-code/?data=%s&size=250x250" % (template_values["json_query_data"],)
-        template = jinja_environment.get_template("receipt.html")
-        self.response.out.write(template.render(template_values))
+            self.response.out.write(json.dumps(json_data))
+        else:
+            template_values['food_items'] = query_data
+            template_values['QR_url'] = "http://api.qrserver.com/v1/create-qr-code/?data=%s&size=250x250" % (receipt_key,)
+            template = jinja_environment.get_template("receipt.html")
+            self.response.out.write(template.render(template_values))
 
     def post(self):
         self.response.write("hello")

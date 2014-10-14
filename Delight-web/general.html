@@ -52,7 +52,7 @@
                   </thead>
                   <tbody>
                     {% for review in reviews %}
-                      <tr>
+                      <tr data-key='{{review.key()}}'>
                         <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
                         <td>{{review.comment}}</td>
                         <td>{{review.created_at.date()}}</td>
@@ -63,6 +63,14 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+      $('tr').click(function() {
+        var location = "/response?key=" + $(this).data('key');
+        window.location = location;
+        console.log(location);
+      });
+    </script>
 
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>

@@ -49,7 +49,7 @@
                   </thead>
                   <tbody>
                     {% for review in reviews %}
-                      <tr>
+                      <tr data-key='{{review.key()}}'>
                         <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
                         <td>{{review.comment}}</td>
                         <td>{{review.created_at.date()}}</td>
