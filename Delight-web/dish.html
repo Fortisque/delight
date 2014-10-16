@@ -1,21 +1,66 @@
 {% extends "base.html" %}
 {% block body %}
-  <h1> Dashboard </h1>
-    <div class="sub-nav">
-        <ul>
-            <li><a href="/review/"> General </a></li>
-            <li><a href="/review/food"> Food </a></li>
-            <li><a href="/review/server"> Server </a></li>
-        <ul>
+    <link rel="stylesheet" type="text/css" href="/static/analysis.css">
+    <style>
+      .picture {
+        padding: 0px;
+      }
+    </style>
+
+    <div class="col-md-4 widget">
+        <div class="panel">
+            <div class="panel-heading"><h2>{{name}}</h2></div>
+            <div class="panel-body picture">
+              {% if picture %}
+                <img src="{{picture}}" style="width: 100%;" />
+              {% endif %}
+            </div>
+            <div class="panel-footer">
+                <div class="number">4.6</div>
+                <div class="label">Average Rating</div>
+            </div>
+        </div>
     </div>
 
-    <h2>Analysis on {{name}}</h2>
+    <div class="col-md-8 widget">
+        <div class="panel">
+            <div class="panel-heading">
+                <h2>General Trend for Ratings</h2>
+            </div>
+            <div class="panel-body" id="vis_div" style="min-height: 200px;"></div>
+            <div class="panel-footer">
+                <div class="number">4.6</div>
+                <div class="label">Average Rating</div>
+            </div>
+        </div>
+    </div>
 
-    {% if picture %}
-      <img src="{{picture}}" style="width: 200px;" />
-    {% endif %}
+    <div class="col-md-12 widget">
+        <div class="panel">
+            <div class="panel-heading"><h2>Comments</h2></div>
+            <div class="panel-body">
+                <table class="table table-hover compact" id="datatable">
+                  <thead>
+                    <tr>
+                      <th>Stars</th>
+                      <th>Comment</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for review in reviews %}
+                      <tr data-key='{{review.key()}}'>
+                        <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
+                        <td>{{review.comment}}</td>
+                        <td>{{review.created_at.date()}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    <div id="vis_div"></div>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load('visualization', '1');   // Don't need to specify chart libraries!
@@ -44,37 +89,15 @@
         }
       }
     </script>
+    <script type="text/javascript">
+      $('tr').click(function() {
+        var location = "/response?key=" + $(this).data('key');
+        window.location = location;
+        console.log(location);
+      });
+    </script>
 
-<h1>Comments</h1>
-<table class="table table-hover" id="datatable">
-  <thead>
-    <tr>
-      <th>Stars</th>
-      <th>Comment</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for review in reviews %}
-      <tr data-key="{{review.key()}}">
-        <td><span class="hidden">{{review.stars}}</span><span class="stars">{{review.stars}}</span></td>
-        <td>{{review.comment}}</td>
-        <td>{{review.created_at.date()}}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<script type="text/javascript">
-  $('tr').click(function() {
-    var location = "/response?key=" + $(this).data('key');
-    window.location = location;
-    console.log(location);
-  });
-</script>
-
-<script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-
-<link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
     
 {% endblock %}

@@ -1,65 +1,86 @@
 {% extends "base.html" %}
 {% block body %}
-	<h1> Dashboard </h1>
+	<link rel="stylesheet" type="text/css" href="/static/analysis.css">
 	
 	<div class="sub-nav">
         <ul>
             <li><a href="/review/"> General </a></li>
             <li><a href="/review/food"> Food </a></li>
-            <li><a href="/review/server"> Server </a></li>
+            <li><a class="selected" href="/review/server"> Server </a></li>
         <ul>
     </div>
 
-	<h2> Service Analysis </h2>
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-  <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var arr = [];
-        arr.push(['Name', 'Average Rating', 'Total Reviews']);
-        var food_items = {{servers_data}};
-        for(var name in food_items) {
-          var values = food_items[name];
-          var star_count = values['star_count'];
-          arr.push([name, values['average'], values['total']])
-        }
+	<div class="col-md-7 widget">
+        <div class="panel">
+            <div class="panel-heading"><h2>Waiter Ratings for Today</h2></div>
+            <div class="panel-body" id="chart_div" style="width:100%;"></div>
+            <div class="panel-footer">
+                <div class="number">4.6</div>
+                <div class="label">waiters have an average rating of 3 stars or better</div>
+            </div>
+        </div>
+    </div>
 
-        var data = google.visualization.arrayToDataTable(arr);
+    <div class="col-md-5 widget">
+        <div class="panel">
+            <div class="panel-heading"><h2>Server Ratings for Today</h2></div>
+            <div class="panel-body" id="rating_div" style="width:100%;"></div>
+            <div class="panel-footer">
+                <div class="number">4.6</div>
+                <div class="label">Average Rating</div>
+            </div>
+        </div>
+    </div>
 
-        var options = {
-          hAxis: {
-            title: 'Average Rating',
-            viewWindow: {
-              min: 1,
-              max: 5
-            },
-            ticks: [1, 2, 3, 4, 5]
-          },
-          vAxis: {
-            title: 'Total Reviews',
-            viewWindow: {
-              min: 0,
-              max: 30
-            },
-            ticks: [0,5,10,15,20,25,30]
-          }
-        };
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript">
+	  google.load("visualization", "1", {packages:["corechart"]});
+	  google.setOnLoadCallback(drawChart);
+	  function drawChart() {
+	    var arr = [];
+	    arr.push(['Name', 'Average Rating', 'Total Reviews']);
+	    var food_items = {{servers_data}};
+	    for(var name in food_items) {
+	      var values = food_items[name];
+	      var star_count = values['star_count'];
+	      arr.push([name, values['average'], values['total']])
+	    }
 
-        var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+	    var data = google.visualization.arrayToDataTable(arr);
 
-        google.visualization.events.addListener(chart, 'select', selectHandler);
-        function selectHandler() {
-          var selectedItem = chart.getSelection()[0];
-          if (selectedItem) {
-            var value = data.getValue(selectedItem.row, 0); // 0 because no columns
-            window.location.href = window.location.href + '/individual?name=' + value;
-          }
-        }
+	    var options = {
+	      hAxis: {
+	        title: 'Average Rating',
+	        viewWindow: {
+	          min: 1,
+	          max: 5
+	        },
+	        ticks: [1, 2, 3, 4, 5]
+	      },
+	      vAxis: {
+	        title: 'Total Reviews',
+	        viewWindow: {
+	          min: 0,
+	          max: 30
+	        },
+	        ticks: [0,5,10,15,20,25,30]
+	      }
+	    };
 
-        chart.draw(data, options);
+	    var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
 
-      }
-    </script>
-    <div id="chart_div"></div>
+	    google.visualization.events.addListener(chart, 'select', selectHandler);
+	    function selectHandler() {
+	      var selectedItem = chart.getSelection()[0];
+	      if (selectedItem) {
+	        var value = data.getValue(selectedItem.row, 0); // 0 because no columns
+	        //window.location.href = window.location.href + '/individual?name=' + value;
+	      }
+	    }
+
+	    chart.draw(data, options);
+
+	  }
+	</script>
+
 {% endblock %}

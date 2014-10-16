@@ -20,9 +20,7 @@
             display: none;
         }
         body {
-            background: url(http://s3.amazonaws.com/siteninja/site-ninja1-com/1357772979/original/Eureka-Restuarant-Santa-Barbara_02.jpg?1357772952) fixed; 
-            background-size: cover;
-            background-repeat: no-repeat;
+            background-color: rgba(192, 192, 192, 0.9);
             margin: 0px;
             padding: 0px;
         }
@@ -47,12 +45,11 @@
             font-size: 25px;
             font-family: wizardScript;
             background-color: black;
-            padding: 2%;
+            padding: 1%;
             margin: 0px;
         }
 
         .wrapper {
-            background-color: rgba(255,255,255,0.7);
             margin-left: 10%;
             margin-bottom: 5%;
             padding: 3%;
@@ -65,57 +62,33 @@
         }
 
         #nav {
-            background-color: rgba(255, 160, 0, 0.9);
+            background-color: rgba(255,255,255,0.7);
             text-align: center;
             width: 10%;
-            height: 50%;
             float: left;
         }
 
         #nav ul {
             list-style-type: none;
-            margin: 0;
-            padding: 10px;
-        }
-
-        #nav a {
-            margin: 4%;
-            color:black;
-            text-decoration: none;
-        }
-
-        #nav a:hover {
-            margin: 4%;
-            background-color: white;
-        }
-
-        .sub-nav {
-            width: 30%;
-            float: left;
-        }
-
-        .sub-nav ul {
-            list-style-type: none;
-            padding: 0px;
             margin: 0px;
+            padding: 0px;
         }
 
-        .sub-nav li {
-            display: inline;
-            margin-right: 3px;    
-        }
-
-        .sub-nav a {
-            color:black;
-            text-decoration: none;
-            background-color: orange;
-            padding: 2px;
-        }
-
-        .sub-nav a:hover {
+        #nav li:hover {
             background-color: white;
         }
 
+        #nav li a {
+            color: black;
+            padding: 8%;
+            display: block;
+            text-decoration: none;
+        }
+
+        #nav li a:hover {
+            color: white;
+            background-color: rgb(45,45,45);
+        }
 
         h3 {
             color: black;
@@ -151,13 +124,13 @@
 
     <div id="nav">
         <ul>
-          <li><h3>Welcome Eureka!</h3></li>
+          <h3>Welcome Eureka!</h3>
           <li><a href="/">Dashboard</a></li>
           <li><a href="">Menu</a></li>
           <li><a href="">Servers</a></li>
           <li><a href="">Responses</a></li>
           <li><a href="">Customers</a></li>
-          <li><a href=""><h3>Logout<h3></a></li>
+          <a href=""><h3>Logout</h3></a>
         </ul>
     </div>
     
