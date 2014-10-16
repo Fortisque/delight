@@ -153,7 +153,7 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 				String key = foodJson.getString("key");
 				String name = foodJson.getString("name");
 				String picture = foodJson.getString("picture");
-				FoodReviewCell food = new FoodReviewCell(key, name, resources[i%2]);
+				FoodReviewCell food = new FoodReviewCell(key, name, resources[i]);
 				foods.add(food);
 			}
 		} catch (JSONException e) {
@@ -177,15 +177,17 @@ public class RestaurantHomeActivity extends Activity implements OnClickListener 
 					JSONArray data = new JSONArray();
 					for(FoodReviewCell food : foods){
 						System.out.println(food);
-						JSONObject foodJson = new JSONObject();
-						try {
-							foodJson.put("stars", food.getRating());
-							foodJson.put("comment", food.getComment());
-							foodJson.put("target", food.getKey());
-							foodJson.put("kind", "food");
-							data.put(foodJson);
-						} catch (JSONException e) {
-							e.printStackTrace();
+						if(food.getRating() != 0){
+							JSONObject foodJson = new JSONObject();
+							try {
+								foodJson.put("stars", food.getRating());
+								foodJson.put("comment", food.getComment());
+								foodJson.put("target", food.getKey());
+								foodJson.put("kind", "food");
+								data.put(foodJson);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
 						}
 					}
 					params.put("data", data.toString());

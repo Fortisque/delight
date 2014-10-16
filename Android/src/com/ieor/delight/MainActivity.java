@@ -4,19 +4,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import eu.livotov.zxscan.ZXScanHelper;
-import android.app.ActionBar;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -87,24 +87,52 @@ public class MainActivity extends Activity implements OnClickListener {
 		if (resultCode == Activity.RESULT_OK && requestCode == QR_SCAN_REQUEST_CODE) {
 			String scannedCode = ZXScanHelper.getScannedCode(data);
 			System.out.println(scannedCode);
-			try {
-				JSONObject response =  new JSONObject(scannedCode);
-				System.out.println("response: "+ response.toString());
-				String businessKey = response.getString("business_key");
-				String businessName = response.getString("business_name");
-				String receiptKey = response.getString("receipt_key");
-				JSONArray restaurantData = response.getJSONArray("data");
-				restaurantData.toString();
-				Intent intent = new Intent(this, RestaurantHomeActivity.class);
-				intent.putExtra("businessKey", businessKey);
-				intent.putExtra("businessName", businessName);
-				intent.putExtra("receiptKey", receiptKey);
-				intent.putExtra("data", restaurantData.toString());
-				startActivity(intent);
-			} catch (JSONException e) {
-				e.printStackTrace();
+			if(scannedCode != ""){
+				getReceiptDetail(scannedCode);
+			}else{
 				Toast.makeText(this, "Please Try Again.", Toast.LENGTH_SHORT).show();
 			}
 		}
+	}
+	
+	public void getReceiptDetail(String receiptId) {
+		String getReceiptUrl = "http://delight-food.appspot.com/receipt?json=true&id=" + receiptId;
+		System.out.println("entire getReceiptUrl: " + getReceiptUrl);
+
+		JsonObjectRequest req = new JsonObjectRequest(getReceiptUrl, null,
+		       new Response.Listener<JSONObject>() {
+		           @Override
+		           public void onResponse(JSONObject response) {
+		               try {
+		            	   VolleyLog.v("Response:%n %s", response.toString(4));
+		                   System.out.println("response: "+ response.toString());
+		                   String businessKey = response.getString("business_key");
+		                   String businessName = response.getString("business_name");
+		                   String receiptKey = response.getString("receipt_key");
+		                   JSONArray restaurantData = response.getJSONArray("data");
+		                   //restaurantData.toString();
+		                   openRestaurantHomeActivity(businessKey, businessName, receiptKey, restaurantData.toString());
+		               } catch (JSONException e) {
+		                   e.printStackTrace();
+		               }
+		           }
+		       }, new Response.ErrorListener() {
+		           @Override
+		           public void onErrorResponse(VolleyError error) {
+		               VolleyLog.e("Error: ", error.getMessage());
+		           }
+		       });
+
+		// add the request object to the queue to be executed
+		DelightApplication.getInstance().addToRequestQueue(req);
+	}
+	
+	public void openRestaurantHomeActivity(String businessKey, String businessName, String receiptKey, String restaurantData){
+		Intent intent = new Intent(this, RestaurantHomeActivity.class);
+        intent.putExtra("businessKey", businessKey);
+        intent.putExtra("businessName", businessName);
+        intent.putExtra("receiptKey", receiptKey);
+        intent.putExtra("data", restaurantData);
+        startActivity(intent);
 	}
 }
