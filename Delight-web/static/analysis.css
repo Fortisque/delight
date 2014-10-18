@@ -11,6 +11,10 @@ h2 {
     overflow: hidden;
 }
 
+.panel-body {
+    min-height: 300px;
+}
+
 .panel-heading {
     background-color: rgb(45,45,45);
     color: #eee;
