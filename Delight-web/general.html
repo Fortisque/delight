@@ -107,7 +107,7 @@
         function selectHandler() {
           var selectedItem = wrapper.getChart().getSelection()[0];
           if (selectedItem) {
-            oTable.fnFilter(selectedItem.column + '.', 0);
+            oTable.fnFilter(selectedItem.row + 1 + '.', 0);
           }
         }
       }
