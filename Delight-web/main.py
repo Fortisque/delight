@@ -96,7 +96,8 @@ class ReviewGeneralHandler(webapp2.RequestHandler):
         upper_limit = self.request.get('upper_date') or today
 
         business = Business.all().filter('name =', BUSINESS_NAME).get()
-        reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(business.key()), 'general', lower_limit, upper_limit)
+        #reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(business.key()), 'general', lower_limit, upper_limit)
+        reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2", str(business.key()), 'general')
 
         star_count = defaultdict(int)
         for review in reviews:
@@ -162,7 +163,8 @@ class ReviewDishHandler(webapp2.RequestHandler):
 
         business = Business.all().filter('name =', BUSINESS_NAME).get()
         food_item = FoodItem.gql("WHERE name = :1 AND business_key = :2", template_values['name'], str(business.key())).get()
-        reviews = Review.gql("WHERE business_key = :1 AND target = :2 AND created_at > :3 AND created_at < :4", str(business.key()), str(food_item.key()), lower_limit, upper_limit)
+        #reviews = Review.gql("WHERE business_key = :1 AND target = :2 AND created_at > :3 AND created_at < :4", str(business.key()), str(food_item.key()), lower_limit, upper_limit)
+        reviews = Review.gql("WHERE business_key = :1 AND target = :2", str(business.key()), str(food_item.key()))
 
         star_count = defaultdict(int)
         for review in reviews:
@@ -187,7 +189,8 @@ class ReviewServerHandler(webapp2.RequestHandler):
         business = Business.all().filter('name =', BUSINESS_NAME).get()
 
         servers = {}
-        reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(business.key()), 'service', lower_limit, upper_limit)
+        #reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2 AND created_at > :3 AND created_at < :4", str(business.key()), 'service', lower_limit, upper_limit)
+        reviews = Review.gql("WHERE business_key = :1 AND kind_of_review = :2", str(business.key()), 'service')
         for review in reviews:
             server_name = review.target
             if server_name in servers:
@@ -230,7 +233,8 @@ class ReviewIndividualHandler(webapp2.RequestHandler):
         upper_limit = self.request.get('upper_date') or today
 
         business = Business.all().filter('name =', BUSINESS_NAME).get()
-        reviews = Review.gql("WHERE business_key = :1 AND target = :2 AND created_at > :3 AND created_at < :4", str(business.key()), template_values['name'], lower_limit, upper_limit)
+        #reviews = Review.gql("WHERE business_key = :1 AND target = :2 AND created_at > :3 AND created_at < :4", str(business.key()), template_values['name'], lower_limit, upper_limit)
+        reviews = Review.gql("WHERE business_key = :1 AND target = :2", str(business.key()), template_values['name'])
 
         star_count = defaultdict(int)
         for review in reviews:
