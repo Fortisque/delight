@@ -16,7 +16,7 @@ some directions we were thinking of taking this was to use our app as the paymen
 and perhaps even allow ordering off the mobile phone.
 
 ## Usage
-The [web app](http://delight-food.appspot.com/review) is currently running live and showcases some sample data that a restaurant
+The [web app](http://delight-food.appspot.com) is currently running live and showcases some sample data that a restaurant
 would be able to see if our app was used. The android app is currently only contained within this app and requires a library
 (that is not currently included) in order to scan the QR codes.
 
